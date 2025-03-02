@@ -19,7 +19,7 @@ Feature requests/proposals
 #. Provide as detailed description as possible
     * Use case is great to have
 #. There'll be a bit of discussion for the feature. Don't worry, if it is to be accepted, we'd like to support it, so we need to understand it thoroughly.
-  
+
 
 Pull requests
 -------------
