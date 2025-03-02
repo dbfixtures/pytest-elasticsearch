@@ -36,9 +36,9 @@ dependencies = [
 requires-python = ">= 3.9"
 
 [project.urls]
-"Source" = "https://github.com/ClearcodeHQ/pytest-elasticsearch"
-"Bug Tracker" = "https://github.com/ClearcodeHQ/pytest-elasticsearch/issues"
-"Changelog" = "https://github.com/ClearcodeHQ/pytest-elasticsearch/blob/v4.1.1/CHANGES.rst"
+"Source" = "https://github.com/dbfixtures/pytest-elasticsearch"
+"Bug Tracker" = "https://github.com/dbfixtures/pytest-elasticsearch/issues"
+"Changelog" = "https://github.com/dbfixtures/pytest-elasticsearch/blob/v4.1.1/CHANGES.rst"
 
 [project.entry-points."pytest11"]
 pytest_elasticsearch = "pytest_elasticsearch.plugin"
@@ -79,7 +79,7 @@ select = [
 directory = "newsfragments"
 single_file=true
 filename="CHANGES.rst"
-issue_format="`#{issue} <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/{issue}>`__"
+issue_format="`#{issue} <https://github.com/dbfixtures/pytest-elasticsearch/issues/{issue}>`__"
 
 [[tool.towncrier.type]]
 directory = "break"
@@ -145,7 +145,7 @@ search = 'version = "{current_version}"'
 
 [[tool.tbump.file]]
 src = "pyproject.toml"
-search = '"Changelog" = "https://github.com/ClearcodeHQ/pytest-elasticsearch/blob/v{current_version}/CHANGES.rst"'
+search = '"Changelog" = "https://github.com/dbfixtures/pytest-elasticsearch/blob/v{current_version}/CHANGES.rst"'
 
 # You can specify a list of commands to
 # run after the files have been patched

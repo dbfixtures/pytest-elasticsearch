@@ -30,13 +30,13 @@ Miscellaneus
 Features
 --------
 
-- Support python 3.12 (`#609 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/609>`__)
+- Support python 3.12 (`#609 <https://github.com/dbfixtures/pytest-elasticsearch/issues/609>`__)
 
 
 Miscellaneus
 ------------
 
-- `#582 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/582>`__, `#585 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/585>`__, `#610 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/610>`__, `#611 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/611>`__, `#612 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/612>`__
+- `#582 <https://github.com/dbfixtures/pytest-elasticsearch/issues/582>`__, `#585 <https://github.com/dbfixtures/pytest-elasticsearch/issues/585>`__, `#610 <https://github.com/dbfixtures/pytest-elasticsearch/issues/610>`__, `#611 <https://github.com/dbfixtures/pytest-elasticsearch/issues/611>`__, `#612 <https://github.com/dbfixtures/pytest-elasticsearch/issues/612>`__
 
 
 4.0.2 (2023-09-13)
@@ -47,7 +47,7 @@ Bugfixes
 
 - The current version of pytest-elasticsearch is trying to use pytest.Parser. 
   However, pytest.Parser is added only after pytest 7. We should update 
-  dependencies to use only pytest 7+ (`#522 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/522>`__)
+  dependencies to use only pytest 7+ (`#522 <https://github.com/dbfixtures/pytest-elasticsearch/issues/522>`__)
 
 
 4.0.1 (2023-08-03)
@@ -56,7 +56,7 @@ Bugfixes
 Bugfixes
 --------
 
-- Fixed compatibility with elasticsearch client 7.x (`#512 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/512>`__)
+- Fixed compatibility with elasticsearch client 7.x (`#512 <https://github.com/dbfixtures/pytest-elasticsearch/issues/512>`__)
 
 
 4.0.0 (2023-07-28)
@@ -65,22 +65,22 @@ Bugfixes
 Breaking changes
 ----------------
 
-- Drop support for elastisearch older than 7 (`#384 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/384>`__)
-- Dropped support for python 3.7 (`#474 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/474>`__)
+- Drop support for elastisearch older than 7 (`#384 <https://github.com/dbfixtures/pytest-elasticsearch/issues/384>`__)
+- Dropped support for python 3.7 (`#474 <https://github.com/dbfixtures/pytest-elasticsearch/issues/474>`__)
 
 
 Features
 --------
 
-- Support elasticsearch up to 8.9 (`#384 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/384>`__)
-- Package is fully typed and mypy checked. (`#474 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/474>`__)
-- Support Python 3.11 (`#475 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/475>`__)
+- Support elasticsearch up to 8.9 (`#384 <https://github.com/dbfixtures/pytest-elasticsearch/issues/384>`__)
+- Package is fully typed and mypy checked. (`#474 <https://github.com/dbfixtures/pytest-elasticsearch/issues/474>`__)
+- Support Python 3.11 (`#475 <https://github.com/dbfixtures/pytest-elasticsearch/issues/475>`__)
 
 
 Miscellaneus
 ------------
 
-- `#384 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/384>`__, `#469 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/469>`__, `#470 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/470>`__, `#471 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/471>`__, `#472 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/472>`__, `#473 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/473>`__, `#476 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/476>`__, `#484 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/484>`__, `#486 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/486>`__, `#488 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/488>`__, `#505 <https://github.com/ClearcodeHQ/pytest-elasticsearch/issues/505>`__
+- `#384 <https://github.com/dbfixtures/pytest-elasticsearch/issues/384>`__, `#469 <https://github.com/dbfixtures/pytest-elasticsearch/issues/469>`__, `#470 <https://github.com/dbfixtures/pytest-elasticsearch/issues/470>`__, `#471 <https://github.com/dbfixtures/pytest-elasticsearch/issues/471>`__, `#472 <https://github.com/dbfixtures/pytest-elasticsearch/issues/472>`__, `#473 <https://github.com/dbfixtures/pytest-elasticsearch/issues/473>`__, `#476 <https://github.com/dbfixtures/pytest-elasticsearch/issues/476>`__, `#484 <https://github.com/dbfixtures/pytest-elasticsearch/issues/484>`__, `#486 <https://github.com/dbfixtures/pytest-elasticsearch/issues/486>`__, `#488 <https://github.com/dbfixtures/pytest-elasticsearch/issues/488>`__, `#505 <https://github.com/dbfixtures/pytest-elasticsearch/issues/505>`__
 
 
 3.0.0
