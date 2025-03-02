@@ -1,5 +1,5 @@
 
-.. image:: https://raw.githubusercontent.com/ClearcodeHQ/pytest-elasticsearch/master/logo.png
+.. image:: https://raw.githubusercontent.com/dbfixtures/pytest-elasticsearch/master/logo.png
     :width: 100px
     :height: 100px
     
@@ -173,4 +173,4 @@ which do not set up additional permission restrictions, so it's not a problem on
 Package resources
 -----------------
 
-* Bug tracker: https://github.com/ClearcodeHQ/pytest-elasticsearch/issues
+* Bug tracker: https://github.com/dbfixtures/pytest-elasticsearch/issues
