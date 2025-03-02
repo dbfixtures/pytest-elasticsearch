@@ -2,7 +2,7 @@
 .. image:: https://raw.githubusercontent.com/dbfixtures/pytest-elasticsearch/master/logo.png
     :width: 100px
     :height: 100px
-    
+
 pytest-elasticsearch
 ====================
 
@@ -144,7 +144,7 @@ Example usage:
     .. code-block:: python
 
         elasticsearch_proc = factories.elasticsearch_proc(
-            cluster_name='awsome_cluster)
+            cluster_name='awsome_cluster')
 
 
 * specify your directory as ``elasticsearch_cluster_name`` in your ``pytest.ini`` file.

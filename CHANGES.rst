@@ -45,8 +45,8 @@ Miscellaneus
 Bugfixes
 --------
 
-- The current version of pytest-elasticsearch is trying to use pytest.Parser. 
-  However, pytest.Parser is added only after pytest 7. We should update 
+- The current version of pytest-elasticsearch is trying to use pytest.Parser.
+  However, pytest.Parser is added only after pytest 7. We should update
   dependencies to use only pytest 7+ (`#522 <https://github.com/dbfixtures/pytest-elasticsearch/issues/522>`__)
 
 
