@@ -1,0 +1,1 @@
+Do not run elasticsearch 8 tests with elasticsearch 9 library.
