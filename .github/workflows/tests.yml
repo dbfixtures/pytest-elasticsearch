@@ -18,7 +18,7 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
       ES_JAVA_OPTS: "-Xms256m -Xmx512m"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/pytest
         with:
           python-version: ${{ matrix.python-version }}
@@ -35,7 +35,7 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
       ES_JAVA_OPTS: "-Xms256m -Xmx512m"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/elastic_8
         with:
           python-version: ${{ matrix.python-version }}
@@ -52,7 +52,7 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
       ES_JAVA_OPTS: "-Xms256m -Xmx512m"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/elastic_8
         with:
           python-version: ${{ matrix.python-version }}
@@ -70,7 +70,7 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
       ES_JAVA_OPTS: "-Xms256m -Xmx512m"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/elastic_8
         with:
           python-version: ${{ matrix.python-version }}
@@ -85,7 +85,7 @@ jobs:
       OS: ubuntu-latest
       PYTHON: ${{ matrix.python-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/elastic_8
         with:
           python-version: ${{ matrix.python-version }}
@@ -101,7 +101,7 @@ jobs:
       OS: ubuntu-latest
       PYTHON: ${{ matrix.python-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/elastic_7
         with:
           python-version: ${{ matrix.python-version }}
