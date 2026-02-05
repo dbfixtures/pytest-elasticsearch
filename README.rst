@@ -33,7 +33,7 @@ How to use
 
 .. warning::
 
-    This plugin requires at least version 6.0 of elasticsearch to work.
+    This plugin requires at least version 8.0 of elasticsearch to work.
 
 The plugin contains two fixtures:
 
