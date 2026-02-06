@@ -1,36 +1,17 @@
-# Copyright (C) 2013-2016 by Clearcode <http://clearcode.cc>
-# and associates (see AUTHORS).
-
-# This file is part of pytest-elasticsearch.
-
-# pytest-elasticsearch is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# pytest-elasticsearch is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public License
-# along with pytest-elasticsearch.  If not, see <http://www.gnu.org/licenses/>.
-"""Fixture factories."""
+"""Process fixture factory."""
 
 import shutil
 from pathlib import Path
 from typing import Callable, Iterator, Optional
 
 import pytest
-from elasticsearch import Elasticsearch
-from elasticsearch import __version__ as elastic_version
+from _pytest.fixtures import FixtureRequest
+from _pytest.tmpdir import TempPathFactory
 from mirakuru import ProcessExitedWithError
-from port_for import get_port
-from port_for.api import PortType
-from pytest import FixtureRequest, TempPathFactory
+from port_for import PortType, get_port
 
 from pytest_elasticsearch.config import get_config
-from pytest_elasticsearch.executor import ElasticSearchExecutor, NoopElasticsearch
+from pytest_elasticsearch.executor import ElasticSearchExecutor
 
 
 def elasticsearch_proc(
@@ -114,59 +95,3 @@ def elasticsearch_proc(
         shutil.rmtree(logs_path)
 
     return elasticsearch_proc_fixture
-
-
-def elasticsearch_noproc(
-    host: Optional[str] = None, port: Optional[int] = None
-) -> Callable[[FixtureRequest], Iterator[NoopElasticsearch]]:
-    """Elasticsearch noprocess factory.
-
-    :param host: hostname
-    :param port: exact port (e.g. '8000', 8000)
-    :returns: function which makes a elasticsearch process
-    """
-
-    @pytest.fixture(scope="session")
-    def elasticsearch_noproc_fixture(request: FixtureRequest) -> Iterator[NoopElasticsearch]:
-        """Noop Process fixture for PostgreSQL.
-
-        :param FixtureRequest request: fixture request object
-        :rtype: pytest_dbfixtures.executors.TCPExecutor
-        :returns: tcp executor-like object
-        """
-        config = get_config(request)
-        es_host = host or config.host
-        assert es_host
-        es_port = port or config.port or 9300
-        assert es_port
-
-        yield NoopElasticsearch(host=es_host, port=es_port)
-
-    return elasticsearch_noproc_fixture
-
-
-def elasticsearch(process_fixture_name: str) -> Callable[[FixtureRequest], Iterator[Elasticsearch]]:
-    """Create Elasticsearch client fixture.
-
-    :param process_fixture_name: elasticsearch process fixture name
-    """
-
-    @pytest.fixture
-    def elasticsearch_fixture(request: FixtureRequest) -> Iterator[Elasticsearch]:
-        """Elasticsearch client fixture."""
-        process = request.getfixturevalue(process_fixture_name)
-        if not process.running():
-            process.start()
-        client = Elasticsearch(
-            hosts=[{"host": process.host, "port": process.port, "scheme": "http"}],
-            request_timeout=30,
-            verify_certs=False,
-        )
-        if elastic_version >= (8, 0, 0):
-            client.options(ignore_status=400)
-
-        yield client
-        for index in client.indices.get_alias():
-            client.indices.delete(index=index)
-
-    return elasticsearch_fixture
