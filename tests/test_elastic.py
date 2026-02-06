@@ -24,11 +24,11 @@ def test_default_configuration(request: FixtureRequest) -> None:
     """Test default configuration."""
     config = pytest_elasticsearch.config.get_config(request)
 
-    assert not config["port"]
-    assert config["host"] == "127.0.0.1"
-    assert not config["cluster_name"]
-    assert config["network_publish_host"] == "127.0.0.1"
-    assert config["index_store_type"] == "mmapfs"
+    assert not config.port
+    assert config.host == "127.0.0.1"
+    assert not config.cluster_name
+    assert config.network_publish_host == "127.0.0.1"
+    assert config.index_store_type == "mmapfs"
 
 
 def test_external_elastic(

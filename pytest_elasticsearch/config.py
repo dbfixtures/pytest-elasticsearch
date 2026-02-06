@@ -1,13 +1,15 @@
 """Configuration for pytest-elasticsearch."""
 
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional, TypedDict
+from typing import Any, Optional
 
 from pytest import FixtureRequest
 
 
-class ElasticsearchConfigDict(TypedDict):
-    """Typed Config dictionary."""
+@dataclass
+class ElasticsearchConfig:
+    """Elasticsearch configuration."""
 
     executable: Path
     host: str
@@ -18,14 +20,14 @@ class ElasticsearchConfigDict(TypedDict):
     index_store_type: str
 
 
-def get_config(request: FixtureRequest) -> ElasticsearchConfigDict:
-    """Return a dictionary with config options."""
+def get_config(request: FixtureRequest) -> ElasticsearchConfig:
+    """Return an ElasticsearchConfig instance with config options."""
 
     def get_elasticsearch_option(option: str) -> Any:
         name = "elasticsearch_" + option
         return request.config.getoption(name) or request.config.getini(name)
 
-    return ElasticsearchConfigDict(
+    return ElasticsearchConfig(
         executable=get_elasticsearch_option("executable"),
         host=get_elasticsearch_option("host"),
         port=get_elasticsearch_option("port"),
