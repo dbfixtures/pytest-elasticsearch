@@ -1,0 +1,1 @@
+Convert TypedDict based configuration into a dataclass based

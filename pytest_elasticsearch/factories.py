@@ -67,22 +67,22 @@ def elasticsearch_proc(
     ) -> Iterator[ElasticSearchExecutor]:
         """Elasticsearch process starting fixture."""
         config = get_config(request)
-        elasticsearch_host = host or config["host"]
-        elasticsearch_executable = executable or config["executable"]
+        elasticsearch_host = host or config.host
+        elasticsearch_executable = executable or config.executable
 
-        elasticsearch_port = get_port(port) or get_port(config["port"])
+        elasticsearch_port = get_port(port) or get_port(config.port)
         assert elasticsearch_port
         elasticsearch_transport_port = get_port(
             transport_tcp_port, exclude_ports=[elasticsearch_port]
-        ) or get_port(config["transport_tcp_port"], exclude_ports=[elasticsearch_port])
+        ) or get_port(config.transport_tcp_port, exclude_ports=[elasticsearch_port])
         assert elasticsearch_transport_port
 
         elasticsearch_cluster_name = (
-            cluster_name or config["cluster_name"] or f"elasticsearch_cluster_{elasticsearch_port}"
+            cluster_name or config.cluster_name or f"elasticsearch_cluster_{elasticsearch_port}"
         )
         assert elasticsearch_cluster_name
-        elasticsearch_index_store_type = index_store_type or config["index_store_type"]
-        elasticsearch_network_publish_host = network_publish_host or config["network_publish_host"]
+        elasticsearch_index_store_type = index_store_type or config.index_store_type
+        elasticsearch_network_publish_host = network_publish_host or config.network_publish_host
         tmpdir = tmp_path_factory.mktemp(f"pytest-elasticsearch-{request.fixturename}")
 
         logs_path = tmpdir / "logs"
@@ -135,9 +135,9 @@ def elasticsearch_noproc(
         :returns: tcp executor-like object
         """
         config = get_config(request)
-        es_host = host or config["host"]
+        es_host = host or config.host
         assert es_host
-        es_port = port or config["port"] or 9300
+        es_port = port or config.port or 9300
         assert es_port
 
         yield NoopElasticsearch(host=es_host, port=es_port)
