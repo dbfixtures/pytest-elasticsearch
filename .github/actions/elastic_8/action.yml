@@ -1,5 +1,5 @@
 name: 'Pytest run'
-description: 'Greet someone'
+description: 'Runs tests against Elasticsearch 8'
 inputs:
   python-version:  # id of input
     description: 'Python version to use'
@@ -11,10 +11,10 @@ runs:
   using: "composite"
   steps:
   - name: Set up Python ${{ inputs.python-version }}
-    uses: actions/setup-python@v5
+    uses: actions/setup-python@v6
     with:
       python-version: ${{ inputs.python-version }}
-  - uses: actions/cache@v4
+  - uses: actions/cache@v5
     with:
       path: ~/elasticsearch
       key: elasticsearch-${{ inputs.elasticsearch }}

@@ -1,0 +1,1 @@
+Drop support for elasticsearch older than 8.0
