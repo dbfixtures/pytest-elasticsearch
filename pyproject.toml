@@ -60,14 +60,12 @@ xfail_strict=true
 addopts = "--max-worker-restart=0 --showlocals --verbose --cov"
 testpaths = "tests"
 
-[tool.black]
-line-length = 100
-target-version = ['py39']
-include = '.*\.pyi?$'
-
 [tool.ruff]
 # Decrease the maximum line length to 79 characters.
 line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
 select = [
     "E",   # pycodestyle
     "F",   # pyflakes
