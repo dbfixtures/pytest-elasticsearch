@@ -1,0 +1,1 @@
+Replace TypedDict-based config with a dataclass-based config.

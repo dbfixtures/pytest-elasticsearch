@@ -26,6 +26,7 @@ from pytest_elasticsearch import factories
 _help_host = "Elasticsearch host"
 _help_executable = "Elasticsearch executable"
 _help_port = "Elasticsearch port"
+_help_port_search_count = "Number of times, pytest-elasticsearch will search for free port"
 _help_cluster_name = "Cluster name of the elasticsearch process fixture"
 _help_index_store_type = "type of the index to use in the elasticsearch process fixture"
 _help_network_publish_host = "network host to which elasticsearch publish to connect to cluseter"
@@ -59,6 +60,9 @@ def pytest_addoption(parser: Parser) -> None:
         name="elasticsearch_port",
         help=_help_port,
         default=None,
+    )
+    parser.addini(
+        name="elasticsearch_port_search_count", type="int", help=_help_port_search_count, default=5
     )
 
     parser.addini(
@@ -104,6 +108,13 @@ def pytest_addoption(parser: Parser) -> None:
 
     parser.addoption(
         "--elasticsearch-port", action="store", dest="elasticsearch_port", help=_help_port
+    )
+    parser.addoption(
+        "--elasticsearch-port-search-count",
+        action="store",
+        type=int,
+        dest="elasticsearch_port_search_count",
+        help=_help_port_search_count,
     )
 
     parser.addoption(

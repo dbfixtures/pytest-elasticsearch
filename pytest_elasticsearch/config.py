@@ -14,6 +14,7 @@ class ElasticsearchConfig:
     executable: Path
     host: str
     port: Optional[int]
+    port_search_count: int
     transport_tcp_port: Optional[int]
     cluster_name: str
     network_publish_host: str
@@ -31,6 +32,7 @@ def get_config(request: FixtureRequest) -> ElasticsearchConfig:
         executable=get_elasticsearch_option("executable"),
         host=get_elasticsearch_option("host"),
         port=get_elasticsearch_option("port"),
+        port_search_count=int(get_elasticsearch_option("port_search_count")),
         transport_tcp_port=get_elasticsearch_option("transport_tcp_port"),
         cluster_name=get_elasticsearch_option("cluster_name"),
         network_publish_host=get_elasticsearch_option("network_publish_host"),
