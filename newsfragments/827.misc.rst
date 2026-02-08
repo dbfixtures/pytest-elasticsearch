@@ -1,0 +1,3 @@
+Add check-python-version-consistency to pyproject.
+
+It'll keep watch over updating supported python version in pyproject.toml
