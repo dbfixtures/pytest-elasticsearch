@@ -18,8 +18,8 @@ Features
 - Marked support for Python 3.13
 
 
-Miscellaneus
-------------
+Miscellaneous
+-------------
 
 - Update elasticsearch in tests up Until 8.16
 
@@ -33,8 +33,8 @@ Features
 - Support python 3.12 (`#609 <https://github.com/dbfixtures/pytest-elasticsearch/issues/609>`__)
 
 
-Miscellaneus
-------------
+Miscellaneous
+-------------
 
 - `#582 <https://github.com/dbfixtures/pytest-elasticsearch/issues/582>`__, `#585 <https://github.com/dbfixtures/pytest-elasticsearch/issues/585>`__, `#610 <https://github.com/dbfixtures/pytest-elasticsearch/issues/610>`__, `#611 <https://github.com/dbfixtures/pytest-elasticsearch/issues/611>`__, `#612 <https://github.com/dbfixtures/pytest-elasticsearch/issues/612>`__
 
@@ -77,8 +77,8 @@ Features
 - Support Python 3.11 (`#475 <https://github.com/dbfixtures/pytest-elasticsearch/issues/475>`__)
 
 
-Miscellaneus
-------------
+Miscellaneous
+-------------
 
 - `#384 <https://github.com/dbfixtures/pytest-elasticsearch/issues/384>`__, `#469 <https://github.com/dbfixtures/pytest-elasticsearch/issues/469>`__, `#470 <https://github.com/dbfixtures/pytest-elasticsearch/issues/470>`__, `#471 <https://github.com/dbfixtures/pytest-elasticsearch/issues/471>`__, `#472 <https://github.com/dbfixtures/pytest-elasticsearch/issues/472>`__, `#473 <https://github.com/dbfixtures/pytest-elasticsearch/issues/473>`__, `#476 <https://github.com/dbfixtures/pytest-elasticsearch/issues/476>`__, `#484 <https://github.com/dbfixtures/pytest-elasticsearch/issues/484>`__, `#486 <https://github.com/dbfixtures/pytest-elasticsearch/issues/486>`__, `#488 <https://github.com/dbfixtures/pytest-elasticsearch/issues/488>`__, `#505 <https://github.com/dbfixtures/pytest-elasticsearch/issues/505>`__
 

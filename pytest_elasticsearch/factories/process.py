@@ -2,16 +2,25 @@
 
 import shutil
 from pathlib import Path
-from typing import Callable, Iterator, Optional
+from typing import Callable, Iterable, Iterator, Optional
 
 import pytest
 from _pytest.fixtures import FixtureRequest
 from _pytest.tmpdir import TempPathFactory
 from mirakuru import ProcessExitedWithError
-from port_for import PortType, get_port
+from port_for import PortForException, PortType, get_port
 
-from pytest_elasticsearch.config import get_config
+from pytest_elasticsearch.config import ElasticsearchConfig, get_config
 from pytest_elasticsearch.executor import ElasticSearchExecutor
+
+
+def _elasticsearch_port(
+    port: Optional[PortType], config: ElasticsearchConfig, excluded_ports: Iterable[int]
+) -> int:
+    """User specified port, otherwise find an unused port from config."""
+    elasticsearch_port = get_port(port, excluded_ports) or get_port(config.port, excluded_ports)
+    assert elasticsearch_port is not None
+    return elasticsearch_port
 
 
 def elasticsearch_proc(
@@ -51,7 +60,34 @@ def elasticsearch_proc(
         elasticsearch_host = host or config.host
         elasticsearch_executable = executable or config.executable
 
-        elasticsearch_port = get_port(port) or get_port(config.port)
+        port_path = tmp_path_factory.getbasetemp()
+        if hasattr(request.config, "workerinput"):
+            port_path = tmp_path_factory.getbasetemp().parent
+
+        n = 0
+        used_ports: set[int] = set()
+        while True:
+            try:
+                elasticsearch_port = _elasticsearch_port(port, config, used_ports)
+                port_filename_path = port_path / f"elastic-{elasticsearch_port}.port"
+                if elasticsearch_port in used_ports:
+                    raise PortForException(
+                        f"Port {elasticsearch_port} already in use, "
+                        f"probably by other instances of the test. "
+                        f"{port_filename_path} is already used."
+                    )
+                used_ports.add(elasticsearch_port)
+                with port_filename_path.open("x") as port_file:
+                    port_file.write(f"elasticsearch_port {elasticsearch_port}\n")
+                break
+            except FileExistsError:
+                n += 1
+                if n >= config.port_search_count:
+                    raise PortForException(
+                        f"Attempted {n} times to select ports. "
+                        f"All attempted ports: {', '.join(map(str, used_ports))} are already "
+                        f"in use, probably by other instances of the test."
+                    ) from None
         assert elasticsearch_port
         elasticsearch_transport_port = get_port(
             transport_tcp_port, exclude_ports=[elasticsearch_port]

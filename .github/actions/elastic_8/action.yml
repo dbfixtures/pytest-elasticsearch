@@ -30,10 +30,10 @@ runs:
     run: pipenv run pip install "elasticsearch<9"
   - name: Run test
     shell: bash
-    run: pipenv run pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n 0 --cov-report=xml
+    run: pipenv run pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist --cov-report=xml
   - name: Run xdist test
     shell: bash
-    run: pipenv run pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n 1 --cov-report=xml:coverage-xdist.xml
+    run: pipenv run pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0 --cov-report=xml:coverage-xdist.xml
   - name: Upload coverage to Codecov
     uses: codecov/codecov-action@v5
     with:
