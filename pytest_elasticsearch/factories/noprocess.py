@@ -1,6 +1,6 @@
 """Noprocess fixture factory."""
 
-from typing import Callable, Iterator, Optional
+from typing import Callable, Iterator
 
 import pytest
 from _pytest.fixtures import FixtureRequest
@@ -10,7 +10,7 @@ from pytest_elasticsearch.executor import NoopElasticsearch
 
 
 def elasticsearch_noproc(
-    host: Optional[str] = None, port: Optional[int] = None
+    host: str | None = None, port: int | None = None
 ) -> Callable[[FixtureRequest], Iterator[NoopElasticsearch]]:
     """Elasticsearch noprocess factory.
 

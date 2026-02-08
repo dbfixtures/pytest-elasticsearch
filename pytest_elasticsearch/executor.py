@@ -3,7 +3,7 @@
 import re
 from pathlib import Path
 from subprocess import check_output
-from typing import Literal, Optional
+from typing import Literal
 
 from mirakuru import HTTPExecutor
 from packaging.version import Version
@@ -61,7 +61,7 @@ class ElasticSearchExecutor(HTTPExecutor):
             elasticsearch process fixture
         :param timeout: Time after which to give up to start elasticsearch
         """
-        self._version: Optional[Version] = None
+        self._version: Version | None = None
         self.executable = executable
         self.host = host
         self.port = port

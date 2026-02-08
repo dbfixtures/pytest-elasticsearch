@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from pytest import FixtureRequest
 
@@ -13,9 +13,9 @@ class ElasticsearchConfig:
 
     executable: Path
     host: str
-    port: Optional[int]
+    port: int | None
     port_search_count: int
-    transport_tcp_port: Optional[int]
+    transport_tcp_port: int | None
     cluster_name: str
     network_publish_host: str
     index_store_type: str
