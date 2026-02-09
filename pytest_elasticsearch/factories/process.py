@@ -2,7 +2,7 @@
 
 import shutil
 from pathlib import Path
-from typing import Callable, Iterable, Iterator, Optional
+from typing import Callable, Iterable, Iterator
 
 import pytest
 from _pytest.fixtures import FixtureRequest
@@ -15,7 +15,7 @@ from pytest_elasticsearch.executor import ElasticSearchExecutor
 
 
 def _elasticsearch_port(
-    port: Optional[PortType], config: ElasticsearchConfig, excluded_ports: Iterable[int]
+    port: PortType | None, config: ElasticsearchConfig, excluded_ports: Iterable[int]
 ) -> int:
     """User specified port, otherwise find an unused port from config."""
     elasticsearch_port = get_port(port, excluded_ports) or get_port(config.port, excluded_ports)
@@ -24,13 +24,13 @@ def _elasticsearch_port(
 
 
 def elasticsearch_proc(
-    executable: Optional[Path] = None,
-    host: Optional[str] = None,
-    port: Optional[PortType] = -1,
-    transport_tcp_port: Optional[PortType] = None,
-    cluster_name: Optional[str] = None,
-    network_publish_host: Optional[str] = None,
-    index_store_type: Optional[str] = None,
+    executable: Path | None = None,
+    host: str | None = None,
+    port: PortType | None = -1,
+    transport_tcp_port: PortType | None = None,
+    cluster_name: str | None = None,
+    network_publish_host: str | None = None,
+    index_store_type: str | None = None,
 ) -> Callable[[FixtureRequest, TempPathFactory], Iterator[ElasticSearchExecutor]]:
     """Create elasticsearch process fixture.
 
