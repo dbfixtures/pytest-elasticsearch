@@ -1,0 +1,1 @@
+Updated pytest to version 9 and update it's configuration to be toml native.
