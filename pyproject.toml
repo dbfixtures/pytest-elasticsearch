@@ -55,10 +55,10 @@ include = ["pytest_elasticsearch*"]
 exclude = ["tests*"]
 namespaces = false
 
-[tool.pytest.ini_options]
+[tool.pytest]
 xfail_strict=true
-addopts = "--showlocals --verbose --cov"
-testpaths = "tests"
+addopts = ["--showlocals", "--verbose", "--cov"]
+testpaths = ["tests"]
 
 [tool.ruff]
 # Decrease the maximum line length to 79 characters.
