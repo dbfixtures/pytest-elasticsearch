@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pytest = "==8.4.2"
+pytest = "==9.0.2"
 port-for = "==1.0.0"
 mirakuru = "==2.6.1"
 elasticsearch = "==9.3.0"
