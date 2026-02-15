@@ -29,7 +29,7 @@ def elasticsearch_noproc(
         config = get_config(request)
         es_host = host or config.host
         assert es_host
-        es_port = port or config.port or 9300
+        es_port = port or config.port or 9200
         assert es_port
 
         yield NoopElasticsearch(host=es_host, port=es_port)

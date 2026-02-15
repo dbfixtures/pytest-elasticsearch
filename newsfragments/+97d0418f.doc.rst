@@ -1,0 +1,1 @@
+Add a quickstart section, prerequisites, and clearer fixture/configuration guidance to the README.
