@@ -95,6 +95,10 @@ showcontent = true
 name = "Deprecations"
 showcontent = true
 
+[tool.towncrier.fragment.doc]
+name = "Documentation"
+showcontent = true
+
 [tool.towncrier.fragment.misc]
 name = "Miscellaneous"
 showcontent = true

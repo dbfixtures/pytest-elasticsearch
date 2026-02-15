@@ -26,7 +26,7 @@ What is this?
 =============
 
 This is a pytest plugin that enables you to test your code that relies on a running Elasticsearch search engine.
-It allows you to specify fixtures for Elasticsearch process and client.
+It allows you to specify fixtures for Elasticsearch process and client fixtures.
 
 How to use
 ==========
@@ -35,18 +35,48 @@ How to use
 
     This plugin requires at least version 8.0 of elasticsearch to work.
 
-The plugin contains two fixtures:
+Prerequisites
+-------------
 
-* **elasticsearch** - a client fixture that has functional scope, and which
+Install Elasticsearch 8.x or newer following the official documentation:
+https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html
+
+.. note::
+
+    Elasticsearch enables security features by default. If your instance requires
+    authentication or TLS, configure it accordingly (or disable security for local
+    testing per Elasticsearch docs).
+
+Quickstart: first test
+----------------------
+
+1) Install the plugin and your test dependencies (as you normally do for your project).
+2) Ensure Elasticsearch is available (local install or container).
+3) Create a test that uses the built-in fixture:
+
+.. code-block:: python
+
+    def test_can_connect(elasticsearch):
+        assert elasticsearch.info()
+
+4) Run your tests:
+
+.. code-block:: shell
+
+    pytest
+
+The plugin contains three fixtures:
+
+* **elasticsearch** - a client fixture that has function-scope, and which
   cleans Elasticsearch at the end of each test.
-* **elasticsearch_proc** - a session scoped fixture, that starts Elasticsearch
+* **elasticsearch_proc** - a session-scoped fixture that starts an Elasticsearch
   instance at its first use and stops at the end of the tests.
-* **elasticsearch_nooproc** - a nooprocess fixture, that's holds connection data
-  to already running elasticsearch
+* **elasticsearch_nooproc** - a no-process fixture that holds connection data
+  to an already running Elasticsearch instance
 
-Simply include one of these fixtures into your tests fixture list.
+Simply include one of these fixtures in your test fixture list.
 
-You can also create additional elasticsearch client and process fixtures if you'd need to:
+You can also create additional Elasticsearch client and process fixtures if you need to:
 
 
 .. code-block:: python
@@ -58,27 +88,35 @@ You can also create additional elasticsearch client and process fixtures if you'
 
 .. note::
 
-    Each elasticsearch process fixture can be configured in a different way than the others through the fixture factory arguments.
+    Each Elasticsearch process fixture can be configured in a different way than
+    the others through the fixture factory arguments.
+
+.. note::
+
+    Managed Elasticsearch processes use ``tmp_path_factory`` for their data paths
+    and are cleaned up automatically. When using ``elasticsearch_nooproc``, the
+    running instance (and its data directories) are managed by you.
 
 
 Connecting to already existing Elasticsearch service
 ----------------------------------------------------
 
-Some projects are using already running Elasticsearch servers
-(ie on docker instances). In order to connect to them, one would be using the
+Some projects use already running Elasticsearch servers
+(e.g., in Docker). To connect to them, use the
 ``elasticsearch_nooproc`` fixture.
 
 .. code-block:: python
 
     es_external = factories.elasticsearch('elasticsearch_nooproc')
 
-By default the  ``elasticsearch_nooproc`` fixture would connect to elasticsearch
-instance using **9300** port.
+Configure the host/port to match your running Elasticsearch instance using the
+options below. If not provided, the noprocess fixture defaults to port **9200**.
 
 Configuration
 =============
 
-You can define your settings in three ways, it's fixture factory argument, command line option and pytest.ini configuration option.
+You can define your settings in three ways: fixture factory arguments, command line options,
+and pytest.ini configuration options.
 You can pick which you prefer, but remember that these settings are handled in the following order:
 
 1. Fixture factory argument
@@ -88,7 +126,7 @@ You can pick which you prefer, but remember that these settings are handled in t
 .. list-table:: Configuration options
    :header-rows: 1
 
-   * - ElasticSearch option
+   * - Elasticsearch option
      - Fixture factory argument
      - Command line option
      - pytest.ini option
@@ -110,8 +148,14 @@ You can pick which you prefer, but remember that these settings are handled in t
      - port
      - --elasticsearch-port
      - elasticsearch_port
-     - 6300
-     - random
+     - port (default 9200)
+     - random (free port)
+   * - Free port search count
+     - port_search_count
+     - --elasticsearch-port-search-count
+     - elasticsearch_port_search_count
+     - -
+     - 5
    * - Elasticsearch cluster name
      - cluster_name
      - --elasticsearch-cluster-name
@@ -130,7 +174,7 @@ You can pick which you prefer, but remember that these settings are handled in t
      - elasticsearch_network_publish_host
      - -
      - 127.0.0.1
-   * - transport tcp port
+   * - Transport TCP port
      - transport_tcp_port
      - --elasticsearch-transport-tcp-port
      - elasticsearch_transport_tcp_port
@@ -139,7 +183,7 @@ You can pick which you prefer, but remember that these settings are handled in t
 
 Example usage:
 
-* pass it as an argument in your own fixture
+* pass it as an argument to your own fixture
 
     .. code-block:: python
 
@@ -147,7 +191,7 @@ Example usage:
             cluster_name='awsome_cluster')
 
 
-* specify your directory as ``elasticsearch_cluster_name`` in your ``pytest.ini`` file.
+* specify your cluster name as ``elasticsearch_cluster_name`` in your ``pytest.ini`` file.
 
     To do so, put a line like the following under the ``[pytest]`` section of your ``pytest.ini``:
 
@@ -159,15 +203,15 @@ Example usage:
 Known issues
 ------------
 
-It might happen, that the process can't be started due to lack of permissions.
-The files that user running tests has to have access to are:
+It might happen that the process can't be started due to lack of permissions.
+The files that the user running tests must have access to are:
 
 * /etc/default/elasticsearch
 
-Make sure that you either run tests as a user that has access to these files,
-or you give user proper permissions or add it to proper user groups.
+Make sure you either run tests as a user who has access to these files,
+or grant the user proper permissions or add them to the proper groups.
 
-In CI at the moment, we install elasticsearch from tar/zip archives,
+In CI, we install Elasticsearch from tar/zip archives,
 which do not set up additional permission restrictions, so it's not a problem on the CI/CD.
 
 Package resources
