@@ -1,0 +1,1 @@
+Skip system indices during Elasticsearch client fixture cleanup to avoid 403 errors.
