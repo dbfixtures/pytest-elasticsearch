@@ -28,6 +28,11 @@ What is this?
 This is a pytest plugin that enables you to test your code that relies on a running Elasticsearch search engine.
 It allows you to specify fixtures for Elasticsearch process and client fixtures.
 
+
+.. image:: https://raw.githubusercontent.com/dbfixtures/pytest-elasticsearch/main/docs/images/architecture.svg
+    :alt: Project Architecture Diagram
+    :align: center
+
 How to use
 ==========
 

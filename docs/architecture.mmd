@@ -1,0 +1,17 @@
+sequenceDiagram
+    autonumber
+    participant Pytest as Pytest runner
+    participant ProcFactory as elasticsearch_proc_factory
+    participant ESProcess as Elasticsearch process
+    participant ClientFactory as elasticsearch client fixture
+    participant Elasticsearch as Elasticsearch indices
+
+    Pytest->>ProcFactory: request elasticsearch_proc
+    ProcFactory->>ESProcess: start process
+    loop per test
+        Pytest->>ClientFactory: request elasticsearch client
+        ClientFactory->>ESProcess: connect with Elasticsearch client
+        Pytest->>Elasticsearch: run test using indices
+        Pytest->>Elasticsearch: teardown: delete non-system indices
+        Pytest->>ClientFactory: close client
+    end
