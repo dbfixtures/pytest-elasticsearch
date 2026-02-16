@@ -1,1 +1,0 @@
-Documented the pytest-elasticsearch plugin architecture with a new sequence diagram.

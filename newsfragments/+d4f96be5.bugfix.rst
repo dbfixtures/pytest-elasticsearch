@@ -1,1 +1,0 @@
-Default the noprocess fixture port to 9200 to match Elasticsearch HTTP defaults.

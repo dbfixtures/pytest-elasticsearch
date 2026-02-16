@@ -18,4 +18,4 @@
 # along with pytest-elasticsearch.  If not, see <http://www.gnu.org/licenses/>.
 """Main packge for pytest-elasticsearch."""
 
-__version__ = "4.1.1"
+__version__ = "5.0.0"

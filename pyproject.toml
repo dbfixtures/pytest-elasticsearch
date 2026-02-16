@@ -1,6 +1,6 @@
 [project]
 name = "pytest-elasticsearch"
-version = "4.1.1"
+version = "5.0.0"
 description = "Elasticsearch fixtures and fixture factories for Pytest."
 readme = "README.rst"
 keywords = ["tests", "pytest", "fixture", "elasticsearch"]
@@ -38,7 +38,7 @@ requires-python = ">= 3.10"
 [project.urls]
 "Source" = "https://github.com/dbfixtures/pytest-elasticsearch"
 "Bug Tracker" = "https://github.com/dbfixtures/pytest-elasticsearch/issues"
-"Changelog" = "https://github.com/dbfixtures/pytest-elasticsearch/blob/v4.1.1/CHANGES.rst"
+"Changelog" = "https://github.com/dbfixtures/pytest-elasticsearch/blob/v5.0.0/CHANGES.rst"
 
 [project.entry-points."pytest11"]
 pytest_elasticsearch = "pytest_elasticsearch.plugin"
@@ -104,7 +104,7 @@ name = "Miscellaneous"
 showcontent = true
 
 [tool.tbump.version]
-current = "4.1.1"
+current = "5.0.0"
 
 # Example of a semver regexp.
 # Make sure this matches current_version before

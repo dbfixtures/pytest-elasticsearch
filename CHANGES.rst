@@ -3,6 +3,62 @@ CHANGELOG
 
 .. towncrier release notes start
 
+pytest-elasticsearch 5.0.0 (2026-02-16)
+=======================================
+
+Breaking changes
+----------------
+
+- Replace TypedDict-based config with a dataclass-based config. (`#822 <https://github.com/dbfixtures/pytest-elasticsearch/issues/822>`__)
+- Drop support for Python 3.9 (`#828 <https://github.com/dbfixtures/pytest-elasticsearch/issues/828>`__)
+- Drop support for elasticsearch older than 8.0 (`#830 <https://github.com/dbfixtures/pytest-elasticsearch/issues/830>`__)
+
+
+Bugfixes
+--------
+
+- Skip system indices during Elasticsearch client fixture cleanup to avoid 403 errors. (`#841 <https://github.com/dbfixtures/pytest-elasticsearch/issues/841>`__)
+- Default the noprocess fixture port to 9200 to match Elasticsearch HTTP defaults.
+
+
+Documentation
+-------------
+
+- Documented the pytest-elasticsearch plugin architecture with a new sequence diagram. (`#826 <https://github.com/dbfixtures/pytest-elasticsearch/issues/826>`__)
+- Add a quickstart section, prerequisites, and clearer fixture/configuration guidance to the README.
+
+
+Features
+--------
+
+- Improved xdist compatibility by introducing port-locking mechanism.
+
+  If one worker claims a port, it will lock it, and other xdist workers will
+  either check another port or raise an error with clear message. (`#823 <https://github.com/dbfixtures/pytest-elasticsearch/issues/823>`__)
+- Mark support for Python 3.14 (`#828 <https://github.com/dbfixtures/pytest-elasticsearch/issues/828>`__)
+
+
+Miscellaneous
+-------------
+
+- Run xdist tests on CI with -n auto. (`#823 <https://github.com/dbfixtures/pytest-elasticsearch/issues/823>`__)
+- Replace black with ruff-format (`#824 <https://github.com/dbfixtures/pytest-elasticsearch/issues/824>`__)
+- Added workflow to run tests against oldest supported dependency versions. (`#825 <https://github.com/dbfixtures/pytest-elasticsearch/issues/825>`__)
+- Add check-python-version-consistency to pyproject.
+
+  It'll keep watch over updating supported python version in pyproject.toml (`#827 <https://github.com/dbfixtures/pytest-elasticsearch/issues/827>`__)
+- Add release workflow to ease the release process (`#829 <https://github.com/dbfixtures/pytest-elasticsearch/issues/829>`__)
+- Split factories into separate submodules. (`#831 <https://github.com/dbfixtures/pytest-elasticsearch/issues/831>`__)
+- Add Elasticsearch 9.3 to CI (`#834 <https://github.com/dbfixtures/pytest-elasticsearch/issues/834>`__)
+- Updated pytest to version 9 and update it's configuration to be toml native. (`#852 <https://github.com/dbfixtures/pytest-elasticsearch/issues/852>`__)
+- Adjust links after repository transfer
+- Adjust workflows for actions-reuse 3
+- Do not run elasticsearch 8 tests with elasticsearch 9 library.
+- Include elasticsearch 9.0, 8.17 and 8.18 in CI.
+- Pin elasticsearch 17 tests to ubuntu 22.04, as 24.04 had some issues running elasticsearch 17.
+- Use pre-commit for maintaining code style and linting
+
+
 4.1.1 (2024-12-03)
 ==================
 

@@ -1,1 +1,0 @@
-Pin elasticsearch 17 tests to ubuntu 22.04, as 24.04 had some issues running elasticsearch 17.
