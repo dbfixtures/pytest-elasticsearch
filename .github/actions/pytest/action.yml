@@ -7,6 +7,9 @@ inputs:
   elasticsearch:
     description: 'Elasticsearch version'
     required: true
+  codecov_token:
+    description: 'Codecov token'
+    required: false
 runs:
   using: "composite"
   steps:
@@ -23,20 +26,20 @@ runs:
     with:
       elasticsearch-version: ${{ inputs.elasticsearch }}
   - name: Run test
-    uses: fizyk/actions-reuse/.github/actions/pipenv@v4.1.1
+    uses: fizyk/actions-reuse/.github/actions/pipenv@v4.4.0
     with:
       python-version: ${{ inputs.python-version }}
       command: pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist --cov-report=xml
       allow-prereleases: true
+      editable: true
   - name: Run xdist test
-    uses: fizyk/actions-reuse/.github/actions/pipenv@v4.1.1
+    uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
     with:
-      python-version: ${{ inputs.python-version }}
       command: pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0 --cov-report=xml:coverage-xdist.xml
-      allow-prereleases: true
   - name: Upload coverage to Codecov
     uses: codecov/codecov-action@v5
     with:
+      token: ${{ inputs.codecov_token }}
       flags: linux,elastic-${{ inputs.elasticsearch }}
       env_vars: OS, PYTHON
       fail_ci_if_error: false
