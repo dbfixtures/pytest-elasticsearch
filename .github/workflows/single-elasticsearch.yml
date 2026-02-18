@@ -1,0 +1,70 @@
+name: Run pytest tests
+
+on:
+  workflow_call:
+    inputs:
+      python-versions:
+        description: 'Supported python versions'
+        default: '["3.10", "3.11", "3.12", "3.13", "3.14", "pypy-3.11"]'
+        required: false
+        type: string
+      elastic-versions:
+        description: 'Elasticsearch versions'
+        required: true
+        type: string
+      os:
+        description: 'Operating system to run tests on'
+        default: 'ubuntu-latest'
+        required: false
+        type: string
+    secrets:
+      codecov_token:
+        description: 'Codecov token'
+        required: false
+
+
+jobs:
+  elasticsearch:
+    runs-on: ${{ inputs.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJSON(inputs.python-versions) }}
+        elastic-version: ${{ fromJSON(inputs.elastic-versions) }}
+    env:
+      OS: ${{ inputs.os }}
+      PYTHON: ${{ matrix.python-version }}
+      ELASTIC_VERSION: ${{ matrix.elastic-version }}
+      ES_JAVA_OPTS: "-Xms256m -Xmx512m"
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/cache@v5
+        with:
+          path: ~/elasticsearch
+          key: elasticsearch-${{ matrix.elastic-version }}
+      - name: Setup elasticsearch
+        uses: ankane/setup-elasticsearch@v1
+        with:
+          elasticsearch-version: ${{ matrix.elastic-version }}
+      - name: Run test
+        uses: fizyk/actions-reuse/.github/actions/pipenv@v4.4.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          command: pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist --cov-report=xml
+          allow-prereleases: true
+          editable: true
+      - name: Run xdist test
+        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        with:
+          command: pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0 --cov-report=xml:coverage-xdist.xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.codecov_token }}
+          flags: linux,elastic-${{ matrix.elastic-version }}
+          env_vars: OS,PYTHON,ELASTIC_VERSION
+          fail_ci_if_error: false
