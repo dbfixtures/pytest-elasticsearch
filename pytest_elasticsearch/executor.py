@@ -25,6 +25,10 @@ class NoopElasticsearch:  # pylint:disable=too-few-public-methods
 
         :param str host: hostname under which elasticsearch is available
         :param int port: port under which elasticsearch is available.
+        :param int api_key: authenticate login to elasticsearch.
+        :param int basic_auth: authenticate login to elasticsearch. Format user:password.
+        :param int request_timeout: Timeout for log in.
+        :param int verify_certs: Set to True if we provide certificates.
         """
         self.host = host
         self.port = port

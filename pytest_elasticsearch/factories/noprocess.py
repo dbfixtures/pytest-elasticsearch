@@ -14,7 +14,7 @@ def elasticsearch_noproc(
     port: int | None = None,
     basic_auth: str | tuple[str, str] | None = None,
     api_key: str | tuple[str, str] | None = None,
-    request_timeout: float = 30,
+    request_timeout: float = 30.0,
     verify_certs: bool = False,
 ) -> Callable[[FixtureRequest], Iterator[NoopElasticsearch]]:
     """Elasticsearch noprocess factory.
@@ -39,13 +39,13 @@ def elasticsearch_noproc(
         es_basic_auth = basic_auth
         if es_basic_auth is None:
             es_basic_auth = config.basic_auth
-            if es_basic_auth is not None:
-                user, sep, password = es_basic_auth.partition(":")
-                if not sep:
-                    raise ValueError(
-                        "elasticsearch_basic_auth must be in the format 'username:password'"
-                    )
-                es_basic_auth = (user, password)
+        if isinstance(es_basic_auth, str):
+            user, sep, password = es_basic_auth.partition(":")
+            if not sep:
+                raise ValueError(
+                    "elasticsearch_basic_auth must be in the format 'username:password'"
+                )
+            es_basic_auth = (user, password)
         es_api_key = api_key or config.api_key
 
         yield NoopElasticsearch(
