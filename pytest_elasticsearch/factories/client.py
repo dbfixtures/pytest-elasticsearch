@@ -30,8 +30,10 @@ def elasticsearch(process_fixture_name: str) -> Callable[[FixtureRequest], Itera
             process.start()
         client = Elasticsearch(
             hosts=[{"host": process.host, "port": process.port, "scheme": "http"}],
-            request_timeout=30,
-            verify_certs=False,
+            api_key=process.api_key,
+            basic_auth=process.basic_auth,
+            request_timeout=process.request_timeout,
+            verify_certs=process.verify_certs,
         )
         if elastic_version >= (8, 0, 0):
             client = client.options(ignore_status=400)

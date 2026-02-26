@@ -112,10 +112,16 @@ Some projects use already running Elasticsearch servers
 
 .. code-block:: python
 
-    es_external = factories.elasticsearch('elasticsearch_nooproc')
+    es_external = factories.elasticsearch_noproc(
+        host="localhost",
+        port=9200,
+        basic_auth=("elastic", "<your_password>"),
+    )
+    elasticsearch = factories.elasticsearch("es_external")
 
 Configure the host/port to match your running Elasticsearch instance using the
 options below. If not provided, the noprocess fixture defaults to port **9200**.
+You may provide basic_auth or the api_key. If none is provided, to authentication is assumed.
 
 Configuration
 =============

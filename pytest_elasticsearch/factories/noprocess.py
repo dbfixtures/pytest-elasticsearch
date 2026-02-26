@@ -10,7 +10,12 @@ from pytest_elasticsearch.executor import NoopElasticsearch
 
 
 def elasticsearch_noproc(
-    host: str | None = None, port: int | None = None
+    host: str | None = None,
+    port: int | None = None,
+    basic_auth: str | tuple[str,str] | None = None,
+    api_key: str | tuple[str,str] | None = None,
+    request_timeout: float = 30,
+    verify_certs: bool = False,
 ) -> Callable[[FixtureRequest], Iterator[NoopElasticsearch]]:
     """Elasticsearch noprocess factory.
 
@@ -32,6 +37,13 @@ def elasticsearch_noproc(
         es_port = port or config.port or 9200
         assert es_port
 
-        yield NoopElasticsearch(host=es_host, port=es_port)
+        yield NoopElasticsearch(
+            host=es_host,
+            port=es_port,
+            basic_auth=basic_auth,
+            api_key=api_key, 
+            request_timeout=request_timeout,
+            verify_certs=verify_certs,
+        )
 
     return elasticsearch_noproc_fixture
