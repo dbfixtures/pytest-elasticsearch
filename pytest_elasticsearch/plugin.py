@@ -27,6 +27,8 @@ _help_host = "Elasticsearch host"
 _help_executable = "Elasticsearch executable"
 _help_port = "Elasticsearch port"
 _help_port_search_count = "Number of times, pytest-elasticsearch will search for free port"
+_help_api_key = "API key required for authentication"
+_help_basic_auth = "username and password separated by ':'"
 _help_cluster_name = "Cluster name of the elasticsearch process fixture"
 _help_index_store_type = "type of the index to use in the elasticsearch process fixture"
 _help_network_publish_host = "network host to which elasticsearch publish to connect to cluseter"
@@ -68,6 +70,18 @@ def pytest_addoption(parser: Parser) -> None:
     parser.addini(
         "elasticsearch_transport_tcp_port",
         help=_help_elasticsearch_transport_tcp_port,
+        default=None,
+    )
+
+    parser.addini(
+        "elasticsearch_api_key",
+        help=_help_api_key,
+        default=None,
+    )
+
+    parser.addini(
+        "elasticsearch_basic_auth",
+        help=_help_basic_auth,
         default=None,
     )
 
@@ -122,6 +136,20 @@ def pytest_addoption(parser: Parser) -> None:
         action="store",
         dest="elasticsearch_transport_tcp_port",
         help=_help_elasticsearch_transport_tcp_port,
+    )
+
+    parser.addoption(
+        "--elasticsearch-basic-auth",
+        action="store",
+        dest="elasticsearch_basic_auth",
+        help=_help_basic_auth,
+    )
+
+    parser.addoption(
+        "--elasticsearch-api-key",
+        action="store",
+        dest="elasticsearch_api_key",
+        help=_help_api_key,
     )
 
 
