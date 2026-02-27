@@ -1,0 +1,1 @@
+Bugfix: Option 'elasticsearch_port="9200"' failed with 'expects a string, got int: 9200'".
