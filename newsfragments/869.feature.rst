@@ -1,0 +1,1 @@
+Add options for api_key and basic_auth

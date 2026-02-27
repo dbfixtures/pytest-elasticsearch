@@ -19,6 +19,8 @@ class ElasticsearchConfig:
     cluster_name: str
     network_publish_host: str
     index_store_type: str
+    api_key: str | None
+    basic_auth: str | None
 
 
 def get_config(request: FixtureRequest) -> ElasticsearchConfig:
@@ -45,4 +47,6 @@ def get_config(request: FixtureRequest) -> ElasticsearchConfig:
         cluster_name=get_elasticsearch_option("cluster_name"),
         network_publish_host=get_elasticsearch_option("network_publish_host"),
         index_store_type=get_elasticsearch_option("index_store_type"),
+        api_key=get_elasticsearch_option("api_key"),
+        basic_auth=get_elasticsearch_option("basic_auth"),
     )
