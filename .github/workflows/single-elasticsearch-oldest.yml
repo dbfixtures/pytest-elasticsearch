@@ -61,6 +61,8 @@ jobs:
         uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
         with:
           command: pip install -r oldest/requirements.txt
+      - name: Check free memory
+        run: free -h
       - name: Run tests without xdist
         uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
         with:
@@ -69,6 +71,13 @@ jobs:
         uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
         with:
           command: pytest -c pyproject.oldest.toml --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0 --cov-report=xml:coverage-xdist.xml
+      - name: Upload Elasticsearch logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: elasticsearch-logs-${{ runner.os }}-py${{ matrix.python-version }}-es${{ matrix.elastic-version }}
+          path: /tmp/pytest-of-runner/**/logs
+          if-no-files-found: ignore
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
