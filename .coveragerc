@@ -1,2 +1,4 @@
 [run]
-source = pytest_elasticsearch
+include =
+    pytest_elasticsearch/*
+    tests/*
