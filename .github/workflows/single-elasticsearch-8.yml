@@ -66,11 +66,33 @@ jobs:
       - name: Run tests without xdist
         uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
         with:
-          command: pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist --cov-report=xml
+          command: python -m coverage run -m pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist
+          env: '{"COVERAGE_PROCESS_START": ".coveragerc"}'
+      - name: Combine coverage
+        if: always()
+        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        with:
+          command: python -m coverage combine
+      - name: Export coverage XML
+        if: always()
+        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        with:
+          command: python -m coverage xml
       - name: Run xdist test
         uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
         with:
-          command: pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0 --cov-report=xml:coverage-xdist.xml
+          command: python -m coverage run -m pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0
+          env: '{"COVERAGE_PROCESS_START": ".coveragerc"}'
+      - name: Combine xdist coverage
+        if: always()
+        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        with:
+          command: python -m coverage combine
+      - name: Export xdist coverage XML
+        if: always()
+        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        with:
+          command: python -m coverage xml -o coverage-xdist.xml
       - name: Upload Elasticsearch logs
         if: failure()
         uses: actions/upload-artifact@v7
