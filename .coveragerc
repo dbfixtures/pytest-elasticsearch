@@ -1,4 +1,4 @@
 [run]
 include =
-    pytest_elasticsearch/*
-    tests/*
+    */pytest_elasticsearch/*
+    */tests/*
