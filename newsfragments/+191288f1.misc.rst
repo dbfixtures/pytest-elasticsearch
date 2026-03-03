@@ -1,0 +1,1 @@
+Fix `.coveragerc` to cover code tests on CI installed as editable package.
