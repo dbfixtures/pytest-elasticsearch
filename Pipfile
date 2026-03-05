@@ -8,6 +8,7 @@ pytest = "==9.0.2"
 port-for = "==1.0.0"
 mirakuru = "==3.0.2"
 elasticsearch = "==9.3.0"
+pytest-elasticsearch = {path = ".", editable = true}
 
 [dev-packages]
 towncrier = "==25.8.0"
