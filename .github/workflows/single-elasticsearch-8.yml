@@ -64,35 +64,29 @@ jobs:
       - name: Check free memory
         run: free -h
       - name: Run tests without xdist
+        id: run_serial_tests
         uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
         with:
           command: python -m coverage run -m pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist
-          env: '{"COVERAGE_PROCESS_START": ".coveragerc"}'
-      - name: Combine coverage
-        if: always()
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+          env: '{"COVERAGE_PROCESS_START": ".coveragerc", "COVERAGE_FILE": ".coverage.serial"}'
+      - name: Combine and export coverage
+        if: ${{ always() && (steps.run_serial_tests.conclusion == 'success' || steps.run_serial_tests.conclusion == 'failure') }}
+        uses: fizyk/actions-reuse/.github/actions/coverage-combine-export@v4.4.3
         with:
-          command: python -m coverage combine
-      - name: Export coverage XML
-        if: always()
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
-        with:
-          command: python -m coverage xml
+          data-file: .coverage.serial
+          output-file: coverage-serial.xml
       - name: Run xdist test
+        id: run_xdist_tests
         uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
         with:
           command: python -m coverage run -m pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0
-          env: '{"COVERAGE_PROCESS_START": ".coveragerc"}'
-      - name: Combine xdist coverage
-        if: always()
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+          env: '{"COVERAGE_PROCESS_START": ".coveragerc", "COVERAGE_FILE": ".coverage.xdist"}'
+      - name: Combine and export xdist coverage
+        if: ${{ always() && (steps.run_xdist_tests.conclusion == 'success' || steps.run_xdist_tests.conclusion == 'failure') }}
+        uses: fizyk/actions-reuse/.github/actions/coverage-combine-export@v4.4.3
         with:
-          command: python -m coverage combine
-      - name: Export xdist coverage XML
-        if: always()
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
-        with:
-          command: python -m coverage xml -o coverage-xdist.xml
+          data-file: .coverage.xdist
+          output-file: coverage-xdist.xml
       - name: Upload Elasticsearch logs
         if: failure()
         uses: actions/upload-artifact@v7
