@@ -51,21 +51,21 @@ jobs:
         with:
           elasticsearch-version: ${{ matrix.elastic-version }}
       - name: Set up Pipenv on python ${{ matrix.python-version }}
-        uses: fizyk/actions-reuse/.github/actions/pipenv-setup@v4.4.0
+        uses: fizyk/actions-reuse/.github/actions/pipenv-setup@v4.4.3
         with:
           python-version: ${{ matrix.python-version }}
           cache: false
           allow-prereleases: true
           editable: true
       - name: Downgrade elasticsearch
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.3
         with:
           command: pip install "elasticsearch<9"
       - name: Check free memory
         run: free -h
       - name: Run tests without xdist
         id: run_serial_tests
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.3
         with:
           command: python -m coverage run -m pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist
           env: '{"COVERAGE_PROCESS_START": ".coveragerc", "COVERAGE_FILE": ".coverage.serial"}'
@@ -77,7 +77,7 @@ jobs:
           output-file: coverage-serial.xml
       - name: Run xdist test
         id: run_xdist_tests
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.3
         with:
           command: python -m coverage run -m pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0
           env: '{"COVERAGE_PROCESS_START": ".coveragerc", "COVERAGE_FILE": ".coverage.xdist"}'
