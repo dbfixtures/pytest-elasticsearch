@@ -7,7 +7,7 @@ name = "pypi"
 pytest = "==9.0.3"
 port-for = "==1.0.0"
 mirakuru = "==3.0.2"
-elasticsearch = "==9.3.0"
+elasticsearch = "==9.4.0"
 pytest-elasticsearch = {path = ".", editable = true}
 
 [dev-packages]
