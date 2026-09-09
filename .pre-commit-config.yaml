@@ -1,6 +1,8 @@
 ---
 ci:
   skip: [pipenv, mypy]
+  autofix_prs: false
+  autoupdate_schedule: quarterly
 
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
@@ -40,6 +42,11 @@ repos:
     rev: v0.1.0
     hooks:
       - id: check-python-version-consistency
+
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.29.3
+    hooks:
+      - id: pyproject-fmt
 
   - repo: local
     hooks:
