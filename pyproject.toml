@@ -1,83 +1,128 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools>=61.0.0", "wheel" ]
+
 [project]
 name = "pytest-elasticsearch"
 version = "5.0.0"
 description = "Elasticsearch fixtures and fixture factories for Pytest."
 readme = "README.rst"
-keywords = ["tests", "pytest", "fixture", "elasticsearch"]
-license = {file = "LICENSE"}
-authors = [
-    {name = "Grzegorz Śliwiński", email = "fizyk+pypi@fizyk.dev"}
-]
+keywords = [ "elasticsearch", "fixture", "pytest", "tests" ]
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
+    "Framework :: Pytest",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Testing",
-    "Framework :: Pytest",
 ]
 dependencies = [
-    "pytest >= 8.4.0",
-    "port-for >= 0.7.3",
+    "elasticsearch>=8",
     "mirakuru",
-    "elasticsearch >= 8",
+    "port-for>=0.7.3",
+    "pytest>=8.4.0",
 ]
-requires-python = ">= 3.10"
+
+[[project.authors]]
+name = "Grzegorz Śliwiński"
+email = "fizyk+pypi@fizyk.dev"
 
 [project.urls]
-"Source" = "https://github.com/dbfixtures/pytest-elasticsearch"
+Source = "https://github.com/dbfixtures/pytest-elasticsearch"
 "Bug Tracker" = "https://github.com/dbfixtures/pytest-elasticsearch/issues"
-"Changelog" = "https://github.com/dbfixtures/pytest-elasticsearch/blob/v5.0.0/CHANGES.rst"
+Changelog = "https://github.com/dbfixtures/pytest-elasticsearch/blob/v5.0.0/CHANGES.rst"
 
-[project.entry-points."pytest11"]
+[project.entry-points.pytest11]
 pytest_elasticsearch = "pytest_elasticsearch.plugin"
-
-[build-system]
-requires = ["setuptools >= 61.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 zip-safe = true
 
 [tool.setuptools.packages.find]
-include = ["pytest_elasticsearch*"]
-exclude = ["tests*"]
+include = [ "pytest_elasticsearch*" ]
+exclude = [ "tests*" ]
 namespaces = false
 
-[tool.pytest]
-xfail_strict=true
-addopts = ["--showlocals", "--verbose"]
-testpaths = ["tests"]
-
 [tool.ruff]
+target-version = "py310"
 # Decrease the maximum line length to 79 characters.
 line-length = 100
-target-version = "py310"
 
 [tool.ruff.lint]
 select = [
-    "E",   # pycodestyle
-    "F",   # pyflakes
-    "I",   # isort
-    "D",   # pydocstyle
+    "D", # pydocstyle
+    "E", # pycodestyle
+    "F", # pyflakes
+    "I", # isort
 ]
+
+[tool.pyproject-fmt]
+column_width = 120
+indent = 4
+keep_full_version = true
+generate_python_version_classifiers = false
+table_format = "long"
+sub_table_spacing = "\n"
+
+[tool.pytest]
+addopts = [ "--showlocals", "--verbose" ]
+testpaths = [ "tests" ]
+xfail_strict = true
+
+[[tool.tbump.before_commit]]
+name = "Build changelog"
+cmd = "pipenv run towncrier build --version {new_version} --yes"
+
+[[tool.tbump.field]]
+name = "extra"
+default = ""
+
+[[tool.tbump.file]]
+src = "pytest_elasticsearch/__init__.py"
+
+[[tool.tbump.file]]
+src = "pyproject.toml"
+search = 'version = "{current_version}"'
+
+[[tool.tbump.file]]
+src = "pyproject.toml"
+search = 'Changelog = "https://github.com/dbfixtures/pytest-elasticsearch/blob/v{current_version}/CHANGES.rst"'
+
+[tool.tbump.git]
+message_template = "Release {new_version}"
+tag_template = "v{new_version}"
+
+[tool.tbump.version]
+current = "5.0.0"
+regex = '''
+  (?P<major>\d+)
+  \.
+  (?P<minor>\d+)
+  \.
+  (?P<patch>\d+)
+  (\-
+    (?P<extra>.+)
+  )?
+  '''
 
 [tool.towncrier]
 directory = "newsfragments"
-single_file=true
-filename="CHANGES.rst"
-issue_format="`#{issue} <https://github.com/dbfixtures/pytest-elasticsearch/issues/{issue}>`__"
+filename = "CHANGES.rst"
+issue_format = "`#{issue} <https://github.com/dbfixtures/pytest-elasticsearch/issues/{issue}>`__"
+single_file = true
 
 [[tool.towncrier.type]]
 directory = "break"
@@ -108,58 +153,3 @@ showcontent = true
 directory = "misc"
 name = "Miscellaneus"
 showcontent = true
-
-[tool.tbump.version]
-current = "5.0.0"
-
-# Example of a semver regexp.
-# Make sure this matches current_version before
-# using tbump
-regex = '''
-  (?P<major>\d+)
-  \.
-  (?P<minor>\d+)
-  \.
-  (?P<patch>\d+)
-  (\-
-    (?P<extra>.+)
-  )?
-  '''
-
-[tool.tbump.git]
-message_template = "Release {new_version}"
-tag_template = "v{new_version}"
-
-[[tool.tbump.field]]
-# the name of the field
-name = "extra"
-# the default value to use, if there is no match
-default = ""
-# For each file to patch, add a [[file]] config
-# section containing the path of the file, relative to the
-# tbump.toml location.
-
-[[tool.tbump.file]]
-src = "pytest_elasticsearch/__init__.py"
-
-[[tool.tbump.file]]
-src = "pyproject.toml"
-search = 'version = "{current_version}"'
-
-[[tool.tbump.file]]
-src = "pyproject.toml"
-search = '"Changelog" = "https://github.com/dbfixtures/pytest-elasticsearch/blob/v{current_version}/CHANGES.rst"'
-
-# You can specify a list of commands to
-# run after the files have been patched
-# and before the git commit is made
-
-[[tool.tbump.before_commit]]
-name = "Build changelog"
-cmd = "pipenv run towncrier build --version {new_version} --yes"
-
-# Or run some commands after the git tag and the branch
-# have been pushed:
-#  [[tool.tbump.after_push]]
-#  name = "publish"
-#  cmd = "./publish.sh"
