@@ -36,10 +36,11 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
       ELASTIC_VERSION: ${{ matrix.elastic-version }}
       ES_JAVA_OPTS: "-Xms256m -Xmx512m"
+      UV_NO_SYNC: "1"
     steps:
       - uses: actions/checkout@v6
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+      - name: Set up uv with python ${{ matrix.python-version }}
+        uses: fizyk/actions-reuse/.github/actions/uv-setup@7eefbd6ffc6c6787ad3be6ce93dcf475e3ae99b5 # v5.6.0
         with:
           python-version: ${{ matrix.python-version }}
       - uses: actions/cache@v5
@@ -50,41 +51,29 @@ jobs:
         uses: ankane/setup-elasticsearch@v1
         with:
           elasticsearch-version: ${{ matrix.elastic-version }}
-      - name: Set up Pipenv on python ${{ matrix.python-version }}
-        uses: fizyk/actions-reuse/.github/actions/pipenv-setup@v4.4.7
+      - name: Set up uv with python ${{ matrix.python-version }}
+        uses: fizyk/actions-reuse/.github/actions/uv-setup@7eefbd6ffc6c6787ad3be6ce93dcf475e3ae99b5 # v5.6.0
         with:
           python-version: ${{ matrix.python-version }}
           cache: false
-          allow-prereleases: true
-          editable: true
       - name: Install oldest supported versions
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.7
+        uses: fizyk/actions-reuse/.github/actions/uv-run@7eefbd6ffc6c6787ad3be6ce93dcf475e3ae99b5 # v5.6.0
         with:
           command: pip install -r oldest/requirements.txt
       - name: Check free memory
         run: free -h
+
       - name: Run tests without xdist
-        id: run_serial_tests
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.7
+        uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@7eefbd6ffc6c6787ad3be6ce93dcf475e3ae99b5 # v5.6.0
         with:
-          command: python -m coverage run -m pytest -c pyproject.oldest.toml --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist
-          env: '{"COVERAGE_PROCESS_START": ".coveragerc", "COVERAGE_FILE": ".coverage.serial"}'
-      - name: Combine and export serial coverage
-        if: ${{ always() && (steps.run_serial_tests.conclusion == 'success' || steps.run_serial_tests.conclusion == 'failure') }}
-        uses: fizyk/actions-reuse/.github/actions/coverage-combine-export@v4.4.7
-        with:
+          pytest-opts: -c pyproject.oldest.toml --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist
           data-file: .coverage.serial
           output-file: coverage-serial.xml
       - name: Run xdist test
-        id: run_xdist_tests
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.7
+        uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@7eefbd6ffc6c6787ad3be6ce93dcf475e3ae99b5 # v5.6.0
         with:
-          command: python -m coverage run -m pytest -c pyproject.oldest.toml --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0
-          env: '{"COVERAGE_PROCESS_START": ".coveragerc", "COVERAGE_FILE": ".coverage.xdist"}'
-      - name: Combine and export xdist coverage
-        if: ${{ always() && (steps.run_xdist_tests.conclusion == 'success' || steps.run_xdist_tests.conclusion == 'failure') }}
-        uses: fizyk/actions-reuse/.github/actions/coverage-combine-export@v4.4.7
-        with:
+          pytest-opts: -c pyproject.oldest.toml --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0
+          coverage-config: .coveragerc
           data-file: .coverage.xdist
           output-file: coverage-xdist.xml
       - name: Upload Elasticsearch logs
@@ -97,6 +86,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v6
         with:
+          files: coverage-serial.xml,coverage-xdist.xml
           token: ${{ secrets.codecov_token }}
           flags: linux,elastic-${{ matrix.elastic-version }}
           env_vars: OS,PYTHON,ELASTIC_VERSION
