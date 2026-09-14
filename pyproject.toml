@@ -52,7 +52,7 @@ pytest_elasticsearch = "pytest_elasticsearch.plugin"
 dev = [
     "coverage==7.14.1",
     "elasticsearch==9.4.1",
-    "mirakuru==3.0.2",
+    "mirakuru==3.0.3",
     "mock==5.2.0",
     "mypy==2.3.1; implementation_name=='cpython'",
     "packaging==26.3",
