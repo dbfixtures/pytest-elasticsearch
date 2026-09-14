@@ -1,6 +1,6 @@
 [build-system]
-build-backend = "setuptools.build_meta"
-requires = [ "setuptools>=61.0.0", "wheel" ]
+build-backend = "uv_build"
+requires = [ "uv-build>=0.11" ]
 
 [project]
 name = "pytest-elasticsearch"
@@ -8,14 +8,14 @@ version = "5.0.0"
 description = "Elasticsearch fixtures and fixture factories for Pytest."
 readme = "README.rst"
 keywords = [ "elasticsearch", "fixture", "pytest", "tests" ]
-license = { file = "LICENSE" }
+license = "LGPL-3.0-or-later"
+license-files = [ "COPYING.lesser" ]
 requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
     "Framework :: Pytest",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
@@ -48,17 +48,31 @@ Changelog = "https://github.com/dbfixtures/pytest-elasticsearch/blob/v5.0.0/CHAN
 [project.entry-points.pytest11]
 pytest_elasticsearch = "pytest_elasticsearch.plugin"
 
-[tool.setuptools]
-zip-safe = true
+[dependency-groups]
+dev = [
+    "coverage==7.14.1",
+    "elasticsearch==9.4.1",
+    "mirakuru==3.0.2",
+    "mock==5.2.0",
+    "mypy==2.3.1; implementation_name=='cpython'",
+    "packaging==26.3",
+    "port-for==1.0.0",
+    "pytest==9.1.1",
+    "pytest-xdist==3.8.0",
+    "towncrier==25.8.0",
+    "types-mock==5.2.0.20260518",
+]
+release = [
+    "tbump==6.11.0",
+]
 
-[tool.setuptools.packages.find]
-include = [ "pytest_elasticsearch*" ]
-exclude = [ "tests*" ]
-namespaces = false
+[tool.uv.build-backend]
+module-name = "pytest_elasticsearch"
+module-root = ""
+source-include = [ "CHANGES.rst" ]
 
 [tool.ruff]
 target-version = "py310"
-# Decrease the maximum line length to 79 characters.
 line-length = 100
 
 [tool.ruff.lint]
@@ -84,7 +98,7 @@ xfail_strict = true
 
 [[tool.tbump.before_commit]]
 name = "Build changelog"
-cmd = "pipenv run towncrier build --version {new_version} --yes"
+cmd = "uv run towncrier build --version {new_version} --yes"
 
 [[tool.tbump.field]]
 name = "extra"
