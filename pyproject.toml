@@ -50,7 +50,7 @@ pytest_elasticsearch = "pytest_elasticsearch.plugin"
 
 [dependency-groups]
 dev = [
-    "coverage==7.14.1",
+    "coverage==7.16.0",
     "elasticsearch==9.4.1",
     "mirakuru==3.0.3",
     "mock==5.2.0",
