@@ -39,7 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Set up uv with python ${{ matrix.python-version }}
-        uses: fizyk/actions-reuse/.github/actions/uv-setup@7eefbd6ffc6c6787ad3be6ce93dcf475e3ae99b5 # v5.6.0
+        uses: fizyk/actions-reuse/.github/actions/uv-setup@2ab3c94b032a11fca1238ef134690e589616739d # v5.7.0
         with:
           python-version: ${{ matrix.python-version }}
       - uses: actions/cache@v5
@@ -53,13 +53,13 @@ jobs:
       - name: Check free memory
         run: free -h
       - name: Run tests without xdist
-        uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@7eefbd6ffc6c6787ad3be6ce93dcf475e3ae99b5 # v5.6.0
+        uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@2ab3c94b032a11fca1238ef134690e589616739d # v5.7.0
         with:
           pytest-opts: --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist
           data-file: .coverage.serial
           output-file: coverage-serial.xml
       - name: Run xdist test
-        uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@7eefbd6ffc6c6787ad3be6ce93dcf475e3ae99b5 # v5.6.0
+        uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@2ab3c94b032a11fca1238ef134690e589616739d # v5.7.0
         with:
           pytest-opts: --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0
           coverage-config: .coveragerc
