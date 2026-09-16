@@ -37,7 +37,7 @@ jobs:
       ELASTIC_VERSION: ${{ matrix.elastic-version }}
       ES_JAVA_OPTS: "-Xms256m -Xmx512m"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up uv with python ${{ matrix.python-version }}
         uses: fizyk/actions-reuse/.github/actions/uv-setup@2ab3c94b032a11fca1238ef134690e589616739d # v5.7.0
         with:
