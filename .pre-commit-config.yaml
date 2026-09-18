@@ -1,6 +1,6 @@
 ---
 ci:
-  skip: [uv-sync, mypy]
+  skip: [mypy]
   autofix_prs: false
   autoupdate_schedule: quarterly
 
@@ -48,17 +48,19 @@ repos:
     hooks:
       - id: pyproject-fmt
 
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.30.1
+    hooks:
+      - id: zizmor
+        args: [--no-progress, --fix]
+
+  - repo: https://github.com/kjanat/actionlint
+    rev: v1.15.1
+    hooks:
+      - id: actionlint
+
   - repo: local
     hooks:
-      - id: uv-sync
-        stages: [pre-commit, manual]
-        language: system
-        name: Install dependencies for the local linters
-        entry: uv sync
-        types_or:
-          - python
-          - toml  # pyproject.toml
-        pass_filenames: false
       - id: mypy
         stages: [pre-commit, manual]
         name: mypy

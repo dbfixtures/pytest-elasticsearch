@@ -6,9 +6,11 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions: {}
+
 jobs:
   tests_9:
-    uses: ./.github/workflows/single-elasticsearch.yml
+    uses: $/.github/workflows/single-elasticsearch.yml
     with:
       python-versions: '["3.10", "3.11", "3.12", "3.13", "3.14", "pypy-3.11"]'
       elastic-versions: '["9.3"]'
@@ -16,7 +18,7 @@ jobs:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
   tests_9_older:
     needs: [tests_9]
-    uses: ./.github/workflows/single-elasticsearch.yml
+    uses: $/.github/workflows/single-elasticsearch.yml
     with:
       python-versions: '["3.11", "3.12", "3.13", "3.14"]'
       elastic-versions: '["9.2", "9.1", "9.0"]'
@@ -24,7 +26,7 @@ jobs:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
   tests_8:
     needs: [tests_9_older]
-    uses: ./.github/workflows/single-elasticsearch-8.yml
+    uses: $/.github/workflows/single-elasticsearch-8.yml
     with:
       python-versions: '["3.10", "3.11", "3.12", "3.13", "3.14", "pypy-3.11"]'
       elastic-versions: '["8.19"]'
@@ -32,7 +34,7 @@ jobs:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
   tests_8_older:
     needs: [tests_8]
-    uses: ./.github/workflows/single-elasticsearch-8.yml
+    uses: $/.github/workflows/single-elasticsearch-8.yml
     with:
       python-versions: '["3.14", "pypy-3.11"]'
       elastic-versions: '["8.18", "8.17", "8.16", "8.15"]'
@@ -40,7 +42,7 @@ jobs:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
   tests_oldest:
     needs: [tests_8_older, tests_9_older]
-    uses: ./.github/workflows/single-elasticsearch-oldest.yml
+    uses: $/.github/workflows/single-elasticsearch-oldest.yml
     with:
       python-versions: '["3.10", "3.11", "3.12", "3.13", "3.14", "pypy-3.11"]'
       elastic-versions: '["8.0"]'
