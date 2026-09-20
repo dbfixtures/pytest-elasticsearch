@@ -8,6 +8,8 @@ from typing import Literal
 from mirakuru import HTTPExecutor
 from packaging.version import Version
 
+from pytest_elasticsearch.exceptions import ElasticsearchRuntimeError
+
 
 class NoopElasticsearch:  # pylint:disable=too-few-public-methods
     """No operation Elasticsearch executor mock."""
@@ -90,17 +92,17 @@ class ElasticSearchExecutor(HTTPExecutor):
                 output = check_output([self.executable, "-Vv"]).decode("utf-8")
                 match = re.search(r"Version: (?P<major>\d)\.(?P<minor>\d+)\.(?P<patch>\d+)", output)
                 if not match:
-                    raise RuntimeError(
-                        "Elasticsearch version is not recognized. "
-                        "It is probably not supported. \n"
-                        "Output is: " + output
+                    raise ElasticsearchRuntimeError.unrecognised_version(
+                        output=output,
                     )
                 version = match.groupdict()
                 self._version = Version(
                     ".".join([version["major"], version["minor"], version["patch"]])
                 )
             except OSError as exc:
-                raise RuntimeError(f"'{self.executable}' does not point to elasticsearch.") from exc
+                raise ElasticsearchRuntimeError.invalid_executable(
+                    executable=self.executable,
+                ) from exc
         return self._version
 
     def _exec_command(self) -> str:
@@ -109,7 +111,9 @@ class ElasticSearchExecutor(HTTPExecutor):
         :return: command to run elasticsearch
         """
         if self.version < Version("8.0.0"):
-            raise RuntimeError("This elasticsearch version is not supported.")
+            raise ElasticsearchRuntimeError.unsupported_version(
+                version=str(self.version),
+            )
         return f"""
             {self.executable} -p {self.pidfile}
             -E http.port={self.port}

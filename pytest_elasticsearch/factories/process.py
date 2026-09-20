@@ -8,9 +8,10 @@ import pytest
 from _pytest.fixtures import FixtureRequest
 from _pytest.tmpdir import TempPathFactory
 from mirakuru import ProcessExitedWithError
-from port_for import PortForException, PortType, get_port
+from port_for import PortType, get_port
 
 from pytest_elasticsearch.config import ElasticsearchConfig, get_config
+from pytest_elasticsearch.exceptions import ElasticsearchPortForException
 from pytest_elasticsearch.executor import ElasticSearchExecutor
 
 
@@ -71,10 +72,9 @@ def elasticsearch_proc(
                 elasticsearch_port = _elasticsearch_port(port, config, used_ports)
                 port_filename_path = port_path / f"elastic-{elasticsearch_port}.port"
                 if elasticsearch_port in used_ports:
-                    raise PortForException(
-                        f"Port {elasticsearch_port} already in use, "
-                        f"probably by other instances of the test. "
-                        f"{port_filename_path} is already used."
+                    raise ElasticsearchPortForException.already_used(
+                        port=elasticsearch_port,
+                        port_filename_path=port_filename_path,
                     )
                 used_ports.add(elasticsearch_port)
                 with port_filename_path.open("x") as port_file:
@@ -83,10 +83,9 @@ def elasticsearch_proc(
             except FileExistsError:
                 n += 1
                 if n >= config.port_search_count:
-                    raise PortForException(
-                        f"Attempted {n} times to select ports. "
-                        f"All attempted ports: {', '.join(map(str, used_ports))} are already "
-                        f"in use, probably by other instances of the test."
+                    raise ElasticsearchPortForException.all_attempts_failed(
+                        count=n,
+                        ports=used_ports,
                     ) from None
         assert elasticsearch_port
         elasticsearch_transport_port = get_port(
