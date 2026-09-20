@@ -1,0 +1,1 @@
+Enabled the UP (pyupgrade) and PYI (flake8-pyi) ruff rulesets and applied their autofixes.

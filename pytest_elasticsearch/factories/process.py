@@ -1,8 +1,8 @@
 """Process fixture factory."""
 
 import shutil
+from collections.abc import Callable, Iterable, Iterator
 from pathlib import Path
-from typing import Callable, Iterable, Iterator
 
 import pytest
 from _pytest.fixtures import FixtureRequest
