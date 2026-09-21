@@ -80,8 +80,10 @@ select = [
     "D",   # pydocstyle
     "E",   # pycodestyle
     "F",   # pyflakes
+    "FBT", # flake8-boolean-traps
     "I",   # isort
     "PYI", # flake8-pyi
+    "TRY", # tryceratops
     "UP",  # pyupgrade
 ]
 
