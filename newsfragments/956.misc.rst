@@ -1,1 +1,0 @@
-Migrate tests to use the new `uv-pytest-coverage` composite action from `actions-reuse`.

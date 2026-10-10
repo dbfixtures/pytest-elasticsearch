@@ -1,1 +1,0 @@
-Enabled Ruff's TRY rules and introduced specialised Elasticsearch exception factories.
