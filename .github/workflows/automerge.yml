@@ -1,18 +1,16 @@
 name: Merge me test dependencies!
 
-on:
-  workflow_run:
-    types:
-      - completed
-    workflows:
-      # List all required workflow names here.
-      - 'Run tests'
-      - 'Test build package'
-      - 'Run linters'
+on: # zizmor: ignore[dangerous-triggers] intentional: this workflow runs in the context of the base branch
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+permissions: {}
 
 jobs:
   automerge:
-    uses: fizyk/actions-reuse/.github/workflows/shared-automerge.yml@v4.3.0
+    permissions: {}
+    cache-mode: none
+    uses: fizyk/actions-reuse/.github/workflows/shared-automerge.yml@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
     secrets:
-      app_id: ${{ secrets.MERGE_APP_ID }}
+      client_id: ${{ secrets.MERGE_APP_CLIENT_ID }}
       private_key: ${{ secrets.MERGE_APP_PRIVATE_KEY }}

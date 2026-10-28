@@ -7,6 +7,10 @@ on:
     branches: [ main ]
 
 
+permissions: {}
+
 jobs:
   pre-commit:
-    uses: fizyk/actions-reuse/.github/workflows/shared-pre-commit.yml@v4.3.0
+    permissions:
+      contents: read
+    uses: fizyk/actions-reuse/.github/workflows/shared-pre-commit.yml@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3

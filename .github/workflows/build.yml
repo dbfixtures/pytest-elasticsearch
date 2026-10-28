@@ -5,7 +5,14 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_call:
+
+permissions: {}
 
 jobs:
   build:
-    uses: fizyk/actions-reuse/.github/workflows/shared-pypi.yml@v4.4.0
+    permissions:
+      contents: read  # actions/checkout in the reusable workflow
+    uses: fizyk/actions-reuse/.github/workflows/shared-pypi.yml@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
+    with:
+      dependency-manager: uv

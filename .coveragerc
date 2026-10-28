@@ -1,2 +1,7 @@
 [run]
-source = pytest_elasticsearch
+concurrency = multiprocessing
+parallel = true
+patch = subprocess
+include =
+    */pytest_elasticsearch/*
+    */tests/*

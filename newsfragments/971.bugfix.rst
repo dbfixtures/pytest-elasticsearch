@@ -1,0 +1,2 @@
+Wait until the Elasticsearch cluster health is at least yellow before reporting elasticsearch as started, instead of only waiting for the http port to answer.
+Previously tests could hit ``SERVICE_UNAVAILABLE/1/state not recovered / initialized`` right after startup. Requires mirakuru 3.0.4 or newer.

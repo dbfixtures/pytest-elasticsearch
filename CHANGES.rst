@@ -3,6 +3,52 @@ CHANGELOG
 
 .. towncrier release notes start
 
+pytest-elasticsearch 6.0.0 (2026-10-10)
+=======================================
+
+Breaking changes
+----------------
+
+- Drop support for Python 3.10 (`#958 <https://github.com/dbfixtures/pytest-elasticsearch/issues/958>`__)
+
+
+Features
+--------
+
+- Add support for python 3.15 (`#958 <https://github.com/dbfixtures/pytest-elasticsearch/issues/958>`__)
+
+
+Bugfixes
+--------
+
+- Bugfix: Option 'elasticsearch_port="9200"' failed with 'expects a string, got int: 9200'". (`#868 <https://github.com/dbfixtures/pytest-elasticsearch/issues/868>`__)
+
+
+Miscellaneus
+------------
+
+- Add zizmor to pre-commit and harden GitHub Actions workflow permissions. (`#940 <https://github.com/dbfixtures/pytest-elasticsearch/issues/940>`__)
+- Add pyproject-fmt to pre-commit (`#941 <https://github.com/dbfixtures/pytest-elasticsearch/issues/941>`__)
+- Migrate dev env and build system to uv (`#942 <https://github.com/dbfixtures/pytest-elasticsearch/issues/942>`__)
+- Enabled Ruff's FBT rules. (`#944 <https://github.com/dbfixtures/pytest-elasticsearch/issues/944>`__)
+- Enabled Ruff's TRY rules and introduced specialised Elasticsearch exception factories. (`#945 <https://github.com/dbfixtures/pytest-elasticsearch/issues/945>`__)
+- Add release-schedule workflow replacing manual release workflow. (`#946 <https://github.com/dbfixtures/pytest-elasticsearch/issues/946>`__)
+- Migrated the Automerge workflow to `fizyk/actions-reuse` version 5.6.0. (`#951 <https://github.com/dbfixtures/pytest-elasticsearch/issues/951>`__)
+- Add actionlint to pre-commit (`#952 <https://github.com/dbfixtures/pytest-elasticsearch/issues/952>`__)
+- Configure Dependabot to update pre-commit dependencies. (`#953 <https://github.com/dbfixtures/pytest-elasticsearch/issues/953>`__)
+- Turn off autofix_prs and change pre-commit's autoupdate schedule to quarterly (`#955 <https://github.com/dbfixtures/pytest-elasticsearch/issues/955>`__)
+- Migrate tests to use the new `uv-pytest-coverage` composite action from `actions-reuse`. (`#956 <https://github.com/dbfixtures/pytest-elasticsearch/issues/956>`__)
+- Enabled the UP (pyupgrade) and PYI (flake8-pyi) ruff rulesets and applied their autofixes. (`#960 <https://github.com/dbfixtures/pytest-elasticsearch/issues/960>`__)
+- Adjust shared-automerge permissions (`#983 <https://github.com/dbfixtures/pytest-elasticsearch/issues/983>`__)
+- Fix `.coveragerc` to cover code tests on CI installed as editable package.
+- Improved code-coverage reliability in CI
+- Increase debuggability of elasticsearch failures
+- Refactored workflows, to use separate workflows to be called, instead of shared actions.
+
+  Shared actions are not yet managed by dependabot, and there's a risk of stale dependency being used there.
+- Update the tests, to rely on editable install instead of the source code location.
+
+
 pytest-elasticsearch 5.0.0 (2026-02-16)
 =======================================
 

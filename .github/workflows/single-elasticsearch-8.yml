@@ -5,7 +5,7 @@ on:
     inputs:
       python-versions:
         description: 'Supported python versions'
-        default: '["3.10", "3.11", "3.12", "3.13", "3.14", "pypy-3.11"]'
+        default: '["3.11", "3.12", "3.13", "3.14", "3.15", "pypy-3.11"]'
         required: false
         type: string
       elastic-versions:
@@ -36,42 +36,53 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
       ELASTIC_VERSION: ${{ matrix.elastic-version }}
       ES_JAVA_OPTS: "-Xms256m -Xmx512m"
+      UV_NO_SYNC: "1"
     steps:
-      - uses: actions/checkout@v6
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up uv with python ${{ matrix.python-version }}
+        uses: fizyk/actions-reuse/.github/actions/uv-setup@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: actions/cache@v5
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/elasticsearch
           key: elasticsearch-${{ matrix.elastic-version }}
       - name: Setup elasticsearch
-        uses: ankane/setup-elasticsearch@v1
+        uses: ankane/setup-elasticsearch@b9bcd8dd01414bfe450cc620445e3b1203da3ee2 # v1
         with:
           elasticsearch-version: ${{ matrix.elastic-version }}
-      - name: Set up Pipenv on python ${{ matrix.python-version }}
-        uses: fizyk/actions-reuse/.github/actions/pipenv-setup@v4.4.0
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: false
-          allow-prereleases: true
-          editable: true
       - name: Downgrade elasticsearch
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        uses: fizyk/actions-reuse/.github/actions/uv-pip@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
         with:
-          command: pip install "elasticsearch<9"
+          packages: elasticsearch<9
+      - name: Check free memory
+        run: free -h
       - name: Run tests without xdist
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
         with:
-          command: pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist --cov-report=xml
+          pytest-opts: --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist
+          data-file: .coverage.serial
+          output-file: coverage-serial.xml
       - name: Run xdist test
-        uses: fizyk/actions-reuse/.github/actions/pipenv-run@v4.4.0
+        uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
         with:
-          command: pytest --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0 --cov-report=xml:coverage-xdist.xml
+          pytest-opts: --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0
+          coverage-config: .coveragerc
+          data-file: .coverage.xdist
+          output-file: coverage-xdist.xml
+      - name: Upload Elasticsearch logs
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 #v7.0.2
+        with:
+          name: elasticsearch-logs-${{ runner.os }}-py${{ matrix.python-version }}-es${{ matrix.elastic-version }}
+          path: /tmp/pytest-of-runner/**/logs
+          if-no-files-found: ignore
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
+          files: coverage-serial.xml,coverage-xdist.xml
           token: ${{ secrets.codecov_token }}
           flags: linux,elastic-${{ matrix.elastic-version }}
           env_vars: OS,PYTHON,ELASTIC_VERSION
