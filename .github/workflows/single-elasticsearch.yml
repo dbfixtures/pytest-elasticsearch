@@ -36,6 +36,7 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
       ELASTIC_VERSION: ${{ matrix.elastic-version }}
       ES_JAVA_OPTS: "-Xms256m -Xmx512m"
+      ELASTIC_PASSWORD: elastic-ci-password
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -57,16 +58,50 @@ jobs:
       - name: Run tests without xdist
         uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
         with:
-          pytest-opts: --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist
+          pytest-opts: --elasticsearch-executable=$ES_HOME/bin/elasticsearch -p no:xdist -k "not docker"
           data-file: .coverage.serial
           output-file: coverage-serial.xml
       - name: Run xdist test
         uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
         with:
-          pytest-opts: --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0
+          pytest-opts: --elasticsearch-executable=$ES_HOME/bin/elasticsearch -n auto --max-worker-restart=0 -k "not docker"
           coverage-config: .coveragerc
           data-file: .coverage.xdist
           output-file: coverage-xdist.xml
+      # Same version as the binary above, with security enabled, for the noproc fixture tests (-k docker)
+      - name: Start elasticsearch with authentication in docker
+        timeout-minutes: 5
+        run: |
+          version=$("$ES_HOME/bin/elasticsearch" --version | grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+')
+          docker run -d --name elasticsearch-auth -p 9250:9200 \
+            -e discovery.type=single-node \
+            -e ELASTIC_PASSWORD="$ELASTIC_PASSWORD" \
+            -e xpack.security.enabled=true \
+            -e xpack.security.http.ssl.enabled=false \
+            -e ES_JAVA_OPTS="$ES_JAVA_OPTS" \
+            "elasticsearch:$version"
+          until curl -fs -u "elastic:$ELASTIC_PASSWORD" \
+            "http://localhost:9250/_cluster/health?wait_for_status=yellow&timeout=5s" > /dev/null; do
+            sleep 5
+          done
+      - name: Run tests with basic authentication
+        uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
+        with:
+          pytest-opts: -p no:xdist -k docker --elasticsearch-port=9250 --elasticsearch-basic-auth=elastic:$ELASTIC_PASSWORD
+          data-file: .coverage.docker-basic-auth
+          output-file: coverage-docker-basic-auth.xml
+      - name: Create API key
+        run: |
+          api_key=$(curl -fs -u "elastic:$ELASTIC_PASSWORD" -X POST http://localhost:9250/_security/api_key \
+            -H 'Content-Type: application/json' -d '{"name": "pytest-elasticsearch"}' | jq -r .encoded)
+          echo "::add-mask::$api_key"
+          echo "ELASTICSEARCH_API_KEY=$api_key" >> "$GITHUB_ENV"
+      - name: Run tests with API key
+        uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
+        with:
+          pytest-opts: -p no:xdist -k docker --elasticsearch-port=9250 --elasticsearch-api-key=$ELASTICSEARCH_API_KEY
+          data-file: .coverage.docker-api-key
+          output-file: coverage-docker-api-key.xml
       - name: Upload Elasticsearch logs
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 #v7.0.2
@@ -77,7 +112,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
-          files: coverage-serial.xml,coverage-xdist.xml
+          files: coverage-serial.xml,coverage-xdist.xml,coverage-docker-basic-auth.xml,coverage-docker-api-key.xml
           token: ${{ secrets.codecov_token }}
           flags: linux,elastic-${{ matrix.elastic-version }}
           env_vars: OS,PYTHON,ELASTIC_VERSION

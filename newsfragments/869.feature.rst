@@ -1,1 +1,1 @@
-Add options for api_key and basic_auth
+Add ``basic_auth`` and ``api_key`` options to the noprocess fixture, so the client fixture can connect to an existing Elasticsearch server that requires authentication.

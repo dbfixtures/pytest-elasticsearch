@@ -23,26 +23,21 @@ class NoopElasticsearch:  # pylint:disable=too-few-public-methods
         self,
         host: str,
         port: int,
+        *,
         api_key: str | tuple[str, str] | None = None,
-        basic_auth: str | tuple[str, str] | None = None,
-        request_timeout: float = 30,
-        verify_certs: bool = False,
+        basic_auth: tuple[str, str] | None = None,
     ) -> None:
         """Initialize Elasticsearch executor mock.
 
         :param str host: hostname under which elasticsearch is available
         :param int port: port under which elasticsearch is available.
-        :param int api_key: authenticate login to elasticsearch.
-        :param int basic_auth: authenticate login to elasticsearch. Format user:password.
-        :param int request_timeout: Timeout for log in.
-        :param int verify_certs: Set to True if we provide certificates.
+        :param api_key: API key, encoded or as an (id, api_key) pair
+        :param basic_auth: username and password pair
         """
         self.host = host
         self.port = port
         self.api_key = api_key
         self.basic_auth = basic_auth
-        self.request_timeout = request_timeout
-        self.verify_certs = verify_certs
 
     @staticmethod
     def running() -> Literal[True]:
