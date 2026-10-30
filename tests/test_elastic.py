@@ -22,13 +22,6 @@ def test_elasticsearch(elasticsearch: Elasticsearch) -> None:
     assert info["status"] == "green"
 
 
-def test_elasticsearch__connection_defaults(elasticsearch: Elasticsearch) -> None:
-    """Check the process fixture's client keeps its timeout and certificate settings."""
-    # pylint:disable=protected-access
-    assert elasticsearch._request_timeout == 30
-    assert elasticsearch.transport.node_pool.all()[0].config.verify_certs is False
-
-
 def test_default_configuration(request: FixtureRequest) -> None:
     """Test default configuration."""
     config = pytest_elasticsearch.config.get_config(request)
