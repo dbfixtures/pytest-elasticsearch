@@ -7,6 +7,8 @@ from _pytest.fixtures import FixtureRequest
 from elasticsearch import Elasticsearch
 from elasticsearch import __version__ as elastic_version
 
+from pytest_elasticsearch.executor import NoopElasticsearch
+
 
 def _cleanup_indices(client: Elasticsearch) -> None:
     """Delete user-created indices while skipping system indices."""
@@ -28,8 +30,13 @@ def elasticsearch(process_fixture_name: str) -> Callable[[FixtureRequest], Itera
         process = request.getfixturevalue(process_fixture_name)
         if not process.running():
             process.start()
+        api_key = basic_auth = None
+        if isinstance(process, NoopElasticsearch):
+            api_key, basic_auth = process.api_key, process.basic_auth
         client = Elasticsearch(
             hosts=[{"host": process.host, "port": process.port, "scheme": "http"}],
+            api_key=api_key,
+            basic_auth=basic_auth,
             request_timeout=30,
             verify_certs=False,
         )
