@@ -19,14 +19,25 @@ LOG = getLogger(__name__)
 class NoopElasticsearch:  # pylint:disable=too-few-public-methods
     """No operation Elasticsearch executor mock."""
 
-    def __init__(self, host: str, port: int) -> None:
+    def __init__(
+        self,
+        host: str,
+        port: int,
+        *,
+        api_key: str | tuple[str, str] | None = None,
+        basic_auth: tuple[str, str] | None = None,
+    ) -> None:
         """Initialize Elasticsearch executor mock.
 
         :param str host: hostname under which elasticsearch is available
         :param int port: port under which elasticsearch is available.
+        :param api_key: API key, encoded or as an (id, api_key) pair
+        :param basic_auth: username and password pair
         """
         self.host = host
         self.port = port
+        self.api_key = api_key
+        self.basic_auth = basic_auth
 
     @staticmethod
     def running() -> Literal[True]:
