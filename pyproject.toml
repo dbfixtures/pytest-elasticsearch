@@ -50,14 +50,14 @@ pytest_elasticsearch = "pytest_elasticsearch.plugin"
 
 [dependency-groups]
 dev = [
-    "coverage==7.16.2",
+    "coverage==7.17.0",
     "elasticsearch==9.5.1",
     "mirakuru==3.0.4",
     "mock==5.2.0",
-    "mypy==2.4.0; implementation_name=='cpython'",
+    "mypy==2.4.1; implementation_name=='cpython'",
     "packaging==26.3",
     "port-for==1.1.1",
-    "pytest==9.1.1",
+    "pytest==9.2.0",
     "pytest-xdist==3.8.0",
     "towncrier==26.9.0",
     "types-mock==5.2.0.20260518",
