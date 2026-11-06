@@ -29,6 +29,23 @@ class ElasticsearchRuntimeError(RuntimeError):
         return cls(f"Elasticsearch version '{version}' is not supported.")
 
 
+class ElasticsearchConfigurationError(ValueError):
+    """Elasticsearch fixture configuration error."""
+
+    @classmethod
+    def conflicting_authentication(cls) -> Self:
+        """Create an ElasticsearchConfigurationError from conflicting credentials."""
+        return cls("Both basic_auth and api_key are set. Set only one of them.")
+
+    @classmethod
+    def invalid_basic_auth(cls) -> Self:
+        """Create an ElasticsearchConfigurationError from malformed basic authentication."""
+        return cls(
+            "basic_auth is not in the 'username:password' format. "
+            "Separate the username and the password with a colon."
+        )
+
+
 class ElasticsearchPortForException(PortForException):
     """Elasticsearch port for exceptions."""
 

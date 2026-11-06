@@ -13,7 +13,7 @@ jobs:
     uses: $/.github/workflows/single-elasticsearch.yml
     with:
       python-versions: '["3.11", "3.12", "3.13", "3.14", "3.15", "pypy-3.11"]'
-      elastic-versions: '["9.3"]'
+      elastic-versions: '["9.3.8"]'
     secrets:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
   tests_9_older:
@@ -21,7 +21,7 @@ jobs:
     uses: $/.github/workflows/single-elasticsearch.yml
     with:
       python-versions: '["3.12", "3.13", "3.14", "3.15"]'
-      elastic-versions: '["9.2", "9.1", "9.0"]'
+      elastic-versions: '["9.2.8", "9.1.10", "9.0.8"]'
     secrets:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
   tests_8:
@@ -29,7 +29,7 @@ jobs:
     uses: $/.github/workflows/single-elasticsearch-8.yml
     with:
       python-versions: '["3.11", "3.12", "3.13", "3.14", "3.15", "pypy-3.11"]'
-      elastic-versions: '["8.19"]'
+      elastic-versions: '["8.19.21"]'
     secrets:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
   tests_8_older:
@@ -37,7 +37,7 @@ jobs:
     uses: $/.github/workflows/single-elasticsearch-8.yml
     with:
       python-versions: '["3.15", "pypy-3.11"]'
-      elastic-versions: '["8.18", "8.17", "8.16", "8.15"]'
+      elastic-versions: '["8.18.8", "8.17.10", "8.16.6", "8.15.5"]'
     secrets:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
   tests_oldest:
@@ -45,7 +45,15 @@ jobs:
     uses: $/.github/workflows/single-elasticsearch-oldest.yml
     with:
       python-versions: '["3.11", "3.12", "3.13", "3.14", "3.15", "pypy-3.11"]'
-      elastic-versions: '["8.0"]'
+      elastic-versions: '["8.0.1"]'
       os: "ubuntu-22.04"
     secrets:
       codecov_token: ${{ secrets.CODECOV_TOKEN }}
+  tests_passed:
+    if: always()
+    needs: [tests_9, tests_9_older, tests_8, tests_8_older, tests_oldest]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail unless every test job passed
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+        run: exit 1

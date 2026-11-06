@@ -117,6 +117,20 @@ Some projects use already running Elasticsearch servers
 Configure the host/port to match your running Elasticsearch instance using the
 options below. If not provided, the noprocess fixture defaults to port **9200**.
 
+If the server requires authentication, set either ``basic_auth`` or ``api_key``,
+not both.
+
+.. code-block:: python
+
+    es_external_proc = factories.elasticsearch_noproc(
+        host="localhost",
+        port=9200,
+        basic_auth=("elastic", "<your_password>"),
+    )
+    es_external = factories.elasticsearch("es_external_proc")
+
+Credentials passed to the factory replace those from the command line or ``pytest.ini``.
+
 Configuration
 =============
 
@@ -155,6 +169,18 @@ You can pick which you prefer, but remember that these settings are handled in t
      - elasticsearch_port
      - port (default 9200)
      - random (free port)
+   * - api_key
+     - api_key
+     - --elasticsearch-api-key
+     - elasticsearch_api_key
+     - api_key
+     - -
+   * - user and password separated by ':'
+     - basic_auth
+     - --elasticsearch-basic-auth
+     - elasticsearch_basic_auth
+     - basic_auth
+     - -
    * - Free port search count
      - port_search_count
      - --elasticsearch-port-search-count
