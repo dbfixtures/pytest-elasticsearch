@@ -4,6 +4,8 @@ import warnings
 
 from pytest_elasticsearch import factories
 
+pytest_plugins = ["pytester"]
+
 warnings.simplefilter("error", category=DeprecationWarning)
 
 
