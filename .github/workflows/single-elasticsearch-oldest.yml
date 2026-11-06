@@ -38,6 +38,23 @@ jobs:
       ES_JAVA_OPTS: "-Xms256m -Xmx512m"
       ELASTIC_PASSWORD: elastic-ci-password
       UV_NO_SYNC: "1"
+    # Same version as the binary, with security enabled, for the noproc fixture tests (-k docker)
+    services:
+      elasticsearch:
+        image: elasticsearch:${{ matrix.elastic-version }}
+        env:
+          discovery.type: single-node
+          ELASTIC_PASSWORD: elastic-ci-password
+          xpack.security.enabled: "true"
+          xpack.security.http.ssl.enabled: "false"
+          ES_JAVA_OPTS: "-Xms256m -Xmx512m"
+        options: >-
+          --health-cmd "curl -fs -u elastic:elastic-ci-password http://localhost:9200/_cluster/health?wait_for_status=yellow"
+          --health-interval 10s
+          --health-timeout 35s
+          --health-retries 10
+        ports:
+          - 9250:9200
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -79,22 +96,6 @@ jobs:
           coverage-config: .coveragerc
           data-file: .coverage.xdist
           output-file: coverage-xdist.xml
-      # Same version as the binary above, with security enabled, for the noproc fixture tests (-k docker)
-      - name: Start elasticsearch with authentication in docker
-        timeout-minutes: 5
-        run: |
-          version=$("$ES_HOME/bin/elasticsearch" --version | grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+')
-          docker run -d --name elasticsearch-auth -p 9250:9200 \
-            -e discovery.type=single-node \
-            -e ELASTIC_PASSWORD="$ELASTIC_PASSWORD" \
-            -e xpack.security.enabled=true \
-            -e xpack.security.http.ssl.enabled=false \
-            -e ES_JAVA_OPTS="$ES_JAVA_OPTS" \
-            "elasticsearch:$version"
-          until curl -fs -u "elastic:$ELASTIC_PASSWORD" \
-            "http://localhost:9250/_cluster/health?wait_for_status=yellow&timeout=5s" > /dev/null; do
-            sleep 5
-          done
       - name: Run tests with basic authentication
         uses: fizyk/actions-reuse/.github/actions/uv-pytest-coverage@fda7c6236777ced9c8947ab7243959ee6aa185e9 # v5.10.3
         with:
