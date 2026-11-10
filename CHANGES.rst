@@ -3,6 +3,22 @@ CHANGELOG
 
 .. towncrier release notes start
 
+pytest-elasticsearch 6.1.0 (2026-11-10)
+=======================================
+
+Features
+--------
+
+- Add ``basic_auth`` and ``api_key`` options to the noprocess fixture, so the client fixture can connect to an existing Elasticsearch server that requires authentication. (`#869 <https://github.com/dbfixtures/pytest-elasticsearch/issues/869>`__)
+
+
+Bugfixes
+--------
+
+- Wait until the Elasticsearch cluster health is at least yellow before reporting elasticsearch as started, instead of only waiting for the http port to answer.
+  Previously tests could hit ``SERVICE_UNAVAILABLE/1/state not recovered / initialized`` right after startup. Requires mirakuru 3.0.4 or newer. (`#971 <https://github.com/dbfixtures/pytest-elasticsearch/issues/971>`__)
+
+
 pytest-elasticsearch 6.0.0 (2026-10-10)
 =======================================
 
